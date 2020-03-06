@@ -18,26 +18,32 @@ from sapp import db
 class GetAndPost(Resource):
     #get all
     def get(self):
-        return jsonify(User.objects.all())
+        return jsonify(samatrix.objects.all())
 
     #post data
     def post(self):
         data = api.payload
-        user=User(userId=data['userId'], email=data['email'], firstName=['firstName'], lastName=['lastName'] )
-        user.set_password(data['password'])
-        user.save()
-        return jsonify(User.objects(userId = data['userId']))
+        matrix=samatrix(sid=data['sid'], fsid=data['fsid'], fsname=data['fsname'], Indicator=data['Indicator'],value=data['value'] )
+        matrix.save()
+        return jsonify(samatrix.objects(userId = data['userId']))
 
 
 @api.route('/api/<idx>')
-class GetUpdateDElte(Resource):
+class GetUpdateDelete(Resource):
+    # get data request
     def get(self,idx):
-        return jsonify(User.objects(userId=idx))
+        return jsonify(samatrix.objects(sid=idx))
 
+    # put data
     def put(self,idx):
         data = api.payload
-        User.objects(user)
+        samatrix.objects(sid = idx).update(**data)
+        return jsonify(samatrix.objects(sid=idx))
 
+    # delete data  reqest
+    def delete(self,idex):
+        samatrix.objects(sid=idx).delete()
+        return jsonify("User is deleted")
 #############################
 
 
@@ -126,8 +132,6 @@ def fdash():
 # submitting the student response matrix
 @app.route("/saSubmit",methods=['GET','POST'])
 def saSubmit():
-
-
     userId= session.get('userId')
     name = session['username']
     # resetting the data in samatrix for the user
@@ -151,30 +155,24 @@ def saSubmit():
             value = 1
             sam = samatrix(sid= sid, fsid=fsid,fsname=fsname,Indicator=indicator,value=value)
             sam.save()
-            print(sam)
-            print("initializing samatrix for {id}".format(id=fsid) )
+            print("The assessment drop down list have been reset")
+            #print(sam)
+            #print("initializing samatrix for {id}".format(id=fsid) )
             #! if already there then update it don't create more variables
 
     # retrieving the values for the id from database
     samat=samatrix.objects(sid=userId)
 
+    # retrieving the value of drop down and saving it to database 
+    if request.method == 'POST':
+        value = request.form.getlist('val')
+        print(value)
+        flash("response have been saved!","success")
+        return redirect(url_for('fsa'))
 
     return render_template("saSubmit.html",samat = samat,mgroup=mgroup, ru =ru, name = name,  saSubmit=True)
 
-# sasubmit fo rthe values
 
-@app.route("/samsubmit",methods=['GET','POST'])
-def samsubmit():
-    # getting value from form and saving it to samatrix
-    if request.method == 'POST':
-        value = request.form.get('val')
-        print(value)
-        flash("response have been saved!","success")
-    else:
-        flash("response not saved","danger")
-        return redirect(url_for('saSubmit'))
-
-    return redirect(url_for('fsa'))
 
 
 # route for fsa
