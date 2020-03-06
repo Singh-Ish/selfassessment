@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="jumbotron">
+      <p>welcome <b> {{ sdata.firstName }} {{ sdata.lastName }} </b> to the self assessment Portal</p>
+
+    </div>
+
+    <div class="container message">
+      {% if asubmit %}
+      <b><p>Thank you for already submitting the assessment. For any concerns reach out to your professor</p></b>
+      {% else %}
+      <b><p>Kindly submit the self assessment</p></b>
+      {% endif %}
+    </div>
+
+    <p>Please confirm your project details:</p>
+    <div class="student-details" >
+    <p><b>Project Title:</b> {{sdata.title}}</p>
+    <p><b>Group Number:</b> {{sdata.groupNo}}</p>
+    <p><b>Supervisor:</b> {{sdata["supervisor"]}}</p>
+    <p> <b>co-supervisor:</b> {{sdata.coSupervisor}}</p>
+      </div>
+    <p class="note">
+    <small>  <i><strong> Note</strong> For any changes to the details kindly contact your supervisor or admin staff </i> </small></p>
+
+
+    <br>
+    <button type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button">Submit Assessment</button>
+    <br><br>
+    {% include 'status/sstatus.html' %}
+
+
+    <br>
+    <p>kindly submit once all the assessments have been done </p>
+    <button type="button" name="button">Submit and confirm</button>
+    <p>Note: the button will be active only after all the assessment has been submitted </p>
+
+{% endblock %}

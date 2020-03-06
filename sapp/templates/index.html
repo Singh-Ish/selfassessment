@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+      <h1> Welcome to System and Computer Engineering Self Assessment Portal </h1>
+    </div>
+
+    {% if home %}
+      <h3>Lets get started</h3>
+
+    {% else %}
+      <p>Please  Login or Register  <a href="{{ url_for('login') }}"> Login </a></p>
+    {% endif %}
+
+    <div class="container">
+      <p><a href="{{ url_for('sdash') }}">student Dashboard</a> </p>
+      <p><a href="{{ url_for('saSubmit') }}"> student submit assessment for group members</a></p>
+      <p><a href="{{ url_for('login') }}"> Login </a></p>
+      <p><a href="{{ url_for('register') }}"> register</a></p>
+    </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>added 2 user to the database</h2>
+
+  {% for user in users %}
+  <dl>
+    <dt>UserID: {{ user.userId }} </dt>
+    <dt>email: {{ user.email }}</dt>
+    <dt>password: {{ user.password }}</dt>
+  </dl>
+  {% else %}
+
+  <h3>No users yet!</h3>
+
+  {% endfor %}
+
+
+{% endblock %}

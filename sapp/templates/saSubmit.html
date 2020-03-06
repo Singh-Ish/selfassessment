@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="jumbotron">
+    <p> Hi  <b> {{ name }} </b> please submit the Assessment for your group members in the table below</p>
+
+  </div>
+
+  <div class="satab">
+    <p>{% include 'other/samatrix.html' %}</p>
+    <button type="button" onclick="location.href='{{ url_for('fsa') }}'" name="button">Next</button>
+  </div>
+  <br><br>
+  <div class="sarules">
+    <h2>Category Rubics</h2>
+
+    <p>{% include 'other/rubics.html' %}</p>
+  </div>
+
+{% endblock %}
