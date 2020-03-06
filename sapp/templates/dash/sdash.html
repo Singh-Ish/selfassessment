@@ -7,10 +7,10 @@
     </div>
 
     <div class="container message">
-      {% if asubmit %}
-      <b><p>Thank you for already submitting the assessment. For any concerns reach out to your professor</p></b>
+      {% if (sdata.assessmentStatus == 0 ) %}
+      <p class="n-stu-msg">Kindly submit the self assessment</p>
       {% else %}
-      <b><p>Kindly submit the self assessment</p></b>
+      <p class="s-stu-msg">Thank you for already submitting the assessment. For any concerns reach out to your professor</p>
       {% endif %}
     </div>
 
@@ -25,18 +25,20 @@
     <small>  <i><strong> Note</strong> For any changes to the details kindly contact your supervisor or admin staff </i> </small></p>
 
 
-    <br>
-    <button type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button">Submit Assessment</button>
-    <br><br>
+   
 
     <!-- the status of the other grou members who have submited the assessment  -->
-    <p>The status of the other grou members who have submited the assessment</p>
+    <p>Kindly confirm the group members you will submitting the self assessment for </p>
     {% include 'status/sstatus.html' %}
+    
+    <br>
+    <button type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Confirm and Submit Assessment</button>
+    <br><br>
 
-
+<!--
     <br>
     <p>kindly submit once all the assessments have been done </p>
     <button type="button" name="button">Submit and confirm</button>
     <p>Note: the button will be active only after all the assessment has been submitted </p>
-
+-->
 {% endblock %}

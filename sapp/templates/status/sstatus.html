@@ -5,21 +5,24 @@
   <!-- <caption>Self Assessment </caption> -->
  <tr>
    <th scope="col">Student Name</th>
-   <th scope="col">Assessment Status</th>
+   <!-- <th scope="col">Assessment Status</th> -->
  </tr>
  {% for m in mgroup %}
  <tr>
    <td>{{m.firstName}} {{m.lastName}}</td>
+   
+   <!--    
    {% if (m.assessmentStatus == 0) %}
    <td><span class="rdot"></span></td>
    {% else %}
    <td><span class="gdot"></span></td>
    {% endif %}
  </tr>
+-->
  {% endfor %}
 
 
 
 </table>
 <br>
-<br>
+

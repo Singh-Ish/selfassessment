@@ -143,7 +143,7 @@ def saSubmit():
     # retrieving the relevant data from Projects
     su = projects.objects(userId=userId).first()
     mgroup = projects.objects(groupNo=su.groupNo)
-    # creating the sa matrix table variable
+    # creating the sa matrix table variable and setting the deafult value to 4 ( max )
 
     for g in mgroup:
         sid = userId
@@ -152,7 +152,7 @@ def saSubmit():
 
         for r in ru:
             indicator = r.Indicator
-            value = 1
+            value = 4
             sam = samatrix(sid= sid, fsid=fsid,fsname=fsname,Indicator=indicator,value=value)
             sam.save()
             print("The assessment drop down list have been reset")
@@ -179,6 +179,14 @@ def saSubmit():
 @app.route("/fsa")
 def fsa():
     ## update the assessment status to 1 
+    
+    userId= session.get('userId')
+    
+    su= projects.objects(userId=userId)
+    print(" the assessment status is")
+    print(su.assessmentStatus)
+    su.assessmentStatus=1
+    su.save()
     return render_template("other/fsa.html")
 
 
