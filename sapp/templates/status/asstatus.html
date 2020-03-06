@@ -7,37 +7,29 @@
    <th scope="col">Faculty Name</th>
    <th scope="col">Project Name</th>
    <th scope="col">group Number</th>
+   <th scope="col">Student Id</th>
    <th scope="col">Student Name</th>
    <th scope="col">Assessment status</th>
    <th scope="col">Email Reminder</th>
  </tr>
+
+ {% for p in proj %}
  <tr>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td><span class="dot"></span></td>
+   <td>{{ p.supervisor }}</td>
+   <td>{{ p.title }}</td>
+   <td>{{ p.groupNo }}</td>
+   <td>{{p.userId}}</td>
+   <td>{{p.firstName}} {{p.lastName}}</td>
+    {% if (p.assessmentStatus == 0) %}
+    <td><span class="rdot"></span></td>
+    {% else %}
+    <td><span class="gdot"></span></td>
+    {% endif %}
    <td> <a href="#">link</a></td>
 
  </tr>
- <tr>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td><span class="dot"></span></td>
-   <td> <a href="#">link</a></td>
+ {% endfor %}
 
- </tr>
- <tr>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td>{ Content description }</td>
-   <td><span class="dot"></span></td>
-   <td> <a href="#">link</a></td>
-
- </tr>
 </table>
 <br>
 <br>

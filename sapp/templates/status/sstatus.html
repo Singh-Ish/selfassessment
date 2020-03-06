@@ -10,8 +10,11 @@
  {% for m in mgroup %}
  <tr>
    <td>{{m.firstName}} {{m.lastName}}</td>
-   <td><span class="dot"></span></td
-
+   {% if (m.assessmentStatus == 0) %}
+   <td><span class="rdot"></span></td>
+   {% else %}
+   <td><span class="gdot"></span></td>
+   {% endif %}
  </tr>
  {% endfor %}
 

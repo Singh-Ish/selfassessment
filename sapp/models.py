@@ -76,10 +76,3 @@ class samatrix(db.Document):
 
 
 
-
-#sdata = projects.objects(id=userId)
-
-# admin view
-#admin.add_view(ModelView(User,db.session))
-
-# SQL alchemy  for user role based authentication

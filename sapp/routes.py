@@ -77,7 +77,7 @@ def login():
 def register():
     if session.get('username'):
         return redirect(url_for('home'))
-
+    # check if the student is registered or not using a unique user Id
     form = RegisterForm()
     if form.validate_on_submit():
         userId = form.userId.data
@@ -114,12 +114,14 @@ def sdash():
 @app.route("/admindash",methods=['GET','POST'])
 def admindash():
     ru=rubics.objects()
-    return render_template("dash/admindash.html",ru =ru, adminDash=True)
+    proj = projects.objects.all()
+    return render_template("dash/admindash.html",ru =ru, proj=proj, adminDash=True)
 
 @app.route("/fdash")
 def fdash():
     ru=rubics.objects()
-    return render_template("dash/fdash.html",ru=ru,fdash=True)
+    proj = projects.objects.all()
+    return render_template("dash/fdash.html", proj=proj, ru=ru,fdash=True)
 
 # submitting the student response matrix
 @app.route("/saSubmit",methods=['GET','POST'])
@@ -178,9 +180,10 @@ def samsubmit():
 # route for fsa
 @app.route("/fsa")
 def fsa():
+    ## update the assessment status to 1 
     return render_template("other/fsa.html")
-#
-##
+
+
 #############################
 # upload the excel file to the database
 @app.route('/uploader', methods=['GET','POST'])
@@ -222,3 +225,8 @@ def user():
 
     users = User.objects.all()
     return render_template("user.html",users=users)
+
+@app.route("/project")
+def project():
+    proj = projects.objects.all()
+    return render_template("project.html",proj=proj)
