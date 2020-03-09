@@ -7,11 +7,15 @@ import os
 
 # database  schema  are described here
 class User(db.Document):
+    # user authentication information 
     userId = db.IntField(unique=True) # same as student id
-    firstName = db.StringField( max_length=50)
-    lastName = db.StringField( max_length=50)
     email = db.StringField( max_length=30, unique=True)
     password = db.StringField()
+
+    # user information 
+    firstName = db.StringField( max_length=50)
+    lastName = db.StringField( max_length=50)
+
     #roles = db.relationship('Role',secondary='user_roles', backref = db.backref('users,lazy='dynamic'))
 
     def set_password(self,password):

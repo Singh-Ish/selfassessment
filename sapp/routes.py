@@ -180,8 +180,7 @@ def saSubmit():
 def fsa():
     ## update the assessment status to 1 
     
-    userId= session.get('userId')
-    
+    userId= session.get('userId')  
     su= projects.objects(userId=userId)
     print(" the assessment status is")
     print(su.assessmentStatus)
