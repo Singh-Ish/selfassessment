@@ -181,11 +181,13 @@ def fsa():
     ## update the assessment status to 1 
     
     userId= session.get('userId')  
-    su= projects.objects(userId=userId)
-    print(" the assessment status is")
-    print(su.assessmentStatus)
-    su.assessmentStatus=1
-    su.save()
+    su = projects.objects(userId=userId).first()
+    if (su.assessmentStatus==0):
+        print(" the assessment status is")
+        print(su.assessmentStatus)
+        su.assessmentStatus=1
+        su.save()
+    print("Alredy submitted the assessment")
     return render_template("other/fsa.html")
 
 
