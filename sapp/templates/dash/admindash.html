@@ -22,7 +22,14 @@
     <button type="button" name="button">Mail the result to Myself</button>
   </div>
 
+
   <br><br>
+
+  <p>For sending email reminders click here <br>
+    <form action="{{ url_for ('email') }}">
+      <button type="submit"> Send Email </button>
+    </form>
+    </p>
 
 <div class="sarules">
   <h2>category Rubics</h2>

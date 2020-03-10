@@ -1,7 +1,7 @@
 from sapp import app,db,api,mail
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify
 from sapp.models import User, rubics, projects , samatrix
-from sapp.forms import LoginForm, RegisterForm
+from sapp.forms import LoginForm, RegisterForm 
 from flask import flash
 from werkzeug.utils import secure_filename
 import os
@@ -243,19 +243,29 @@ def project():
 
 ############# sending a Email ############
 
-@app.route('/sendmail', methods=['GET', 'POST'])
+@app.route('/email', methods=['GET', 'POST'])
+def email():
+    return render_template("email.html")
+
+
+@app.route('/sendmail', methods=['GET','POST'])
 def sendmail():
+    print("helo from send mail function ")
+    rec= request.form["reciever"]
+    msg= request.form["message"]
+    print(rec)
+
     subject = 'Mail from flask server'
     msg = "testing the body message form flask mail "
     recipients = 'ishdeep.711@gmail.com'
     sender = 'ishdeepsingh@sce.carleton.ca'
     msg = Message(subject=subject, body=msg,
                   sender=sender, recipients=recipients)
-    mail.send(msg)
+    #mail.send(msg)
     ''' adding attachment
     with app.open_resource("image.png") as fp:
         msg.attach("image.png", "image/png", fp.read())
     '''
-    print("mail has been send")
+    
     flash("Mail has been Sent", "success")
-    return redirect(url_for('home'))
+    return redirect(url_for('admindash'))
