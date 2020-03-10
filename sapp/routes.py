@@ -250,18 +250,23 @@ def email():
 
 @app.route('/sendmail', methods=['GET','POST'])
 def sendmail():
-    print("helo from send mail function ")
-    rec= request.form["reciever"]
-    msg= request.form["message"]
-    print(rec)
+    
+    recipients = request.form["reciever"]
+    recipients = list(recipients.split(","))
+    body = request.form["message"]
+    subject = request.form["subject"]
+    print(recipients)
+    print(type(subject))
+    print(type(body))
 
-    subject = 'Mail from flask server'
-    msg = "testing the body message form flask mail "
-    recipients = 'ishdeep.711@gmail.com'
+    #subject = 'Mail from flask server'
+    #msg = "testing the body message form flask mail "
+    #recipients = 'ishdeep.711@gmail.com'
     sender = 'ishdeepsingh@sce.carleton.ca'
-    msg = Message(subject=subject, body=msg,
+    msg = Message(subject=subject, body=body,
                   sender=sender, recipients=recipients)
-    #mail.send(msg)
+    mail.send(msg)
+    print("Mail has been sent  ")
     ''' adding attachment
     with app.open_resource("image.png") as fp:
         msg.attach("image.png", "image/png", fp.read())
