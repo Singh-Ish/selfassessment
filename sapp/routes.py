@@ -1,4 +1,4 @@
-from sapp import app,db,api
+from sapp import app,db,api,mail
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify
 from sapp.models import User, rubics, projects , samatrix
 from sapp.forms import LoginForm, RegisterForm
@@ -8,6 +8,7 @@ import os
 import pandas as pd
 from flask_restplus import Resource
 from sapp import db
+from flask_mail import Mail, Message
 
 #from flask_user import role_required, UserManager, UserMixin
 #from flask_mail import Mail
@@ -237,3 +238,24 @@ def user():
 def project():
     proj = projects.objects.all()
     return render_template("project.html",proj=proj)
+
+
+
+############# sending a Email ############
+
+@app.route('/sendmail', methods=['GET', 'POST'])
+def sendmail():
+    subject = 'Mail from flask server'
+    msg = "testing the body message form flask mail "
+    recipients = 'ishdeep.711@gmail.com'
+    sender = 'ishdeepsingh@sce.carleton.ca'
+    msg = Message(subject=subject, body=msg,
+                  sender=sender, recipients=recipients)
+    mail.send(msg)
+    ''' adding attachment
+    with app.open_resource("image.png") as fp:
+        msg.attach("image.png", "image/png", fp.read())
+    '''
+    print("mail has been send")
+    flash("Mail has been Sent", "success")
+    return redirect(url_for('home'))

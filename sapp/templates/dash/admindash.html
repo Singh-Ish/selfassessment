@@ -7,35 +7,11 @@
     <h1>welcome {admin name} to self assessmnet admin dashboard</h1>
 </div>
 
-<div class="sarules">
-  <h2>category Rubics</h2>
-<br>
-<form class="fupload" action="/uploader" method="POST" enctype = "multipart/form-data">
-  <input type="file" name="file" >
-  <input type="submit" value=Upload />
-</form>
-<br>
 
-<div class="accordion" id="accordionExample">
-  <div class="card">
-    <div class="card-header" id="headingThree">
-      <h2 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Category Rubics Rules
-        </button>
-      </h2>
-    </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
-        <p>{% include 'other/rubics.html'%}</p>
-      </div>
-    </div>
-  </div>
-</div>
 
 <br><br>
 
-</div>
+
   <div class="satab">
     <h2>Student assesment Status</h2>
     <p>{self assessment table for submitting for the group members}</p>
@@ -46,6 +22,34 @@
     <button type="button" name="button">Mail the result to Myself</button>
   </div>
 
+  <br><br>
 
+<div class="sarules">
+  <h2>category Rubics</h2>
+  <br>
+  <form class="fupload" action="/uploader" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value=Upload />
+  </form>
+  <br>
 
+  <div class="accordion" id="accordionExample">
+    <div class="card">
+      <div class="card-header" id="headingThree">
+        <h2 class="mb-0">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+            aria-expanded="false" aria-controls="collapseThree">
+            Category Rubics Rules
+          </button>
+        </h2>
+      </div>
+      <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+        <div class="card-body">
+          <p>{% include 'other/rubics.html'%}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
 {% endblock %}

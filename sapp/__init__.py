@@ -4,6 +4,7 @@ from flask_mongoengine import MongoEngine
 from flask_admin import Admin
 from flask_admin.contrib.pymongo import ModelView
 from flask_restplus import Api
+from flask_mail import Mail, Message
 
 
 
@@ -16,6 +17,10 @@ admin = Admin(app)
 
 #admin.add_view(ModelView(User,db.session))
     # adding admin to the view
+
+# initializing the mail services 
+mail = Mail(app)
+
 
 # adding the API for the application
 api=Api()

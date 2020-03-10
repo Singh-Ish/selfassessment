@@ -15,9 +15,10 @@ class Config(object):
     #ALLOWED_EXTENSIONS = {'pdf'}
 
     # Flask-Mail settings
-    MAIL_USERNAME = 'email@example.com'
-    MAIL_PASSWORD = 'MAIL_PASSWORD'
-    MAIL_DEFAULT_SENDER =   '"MyApp" <noreply@example.com>'
-    MAIL_SERVER =  'smtp.gmail.com'
-    MAIL_PORT =    465
-    MAIL_USE_SSL = int(True)
+    MAIL_SERVER = 'smtp.sce.carleton.ca'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USE_TLS = False
+
+    MAIL_USERNAME = 'ishdeepsingh@sce.carleton.ca'
+    MAIL_PASSWORD = 'Change.711'
