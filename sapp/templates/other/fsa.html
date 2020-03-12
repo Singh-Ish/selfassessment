@@ -2,13 +2,14 @@
 
 {% block content %}
 
+<br><br>
 <div class="container">
   <p>Kindly share your feedback about the your self assessment and your project organisation. so that we can implement your suggestions and make it better for future students. </p>
-  <form class="" action="index.html" method="post">
-    <textarea name="name" class="feedbacktext"></textarea>
+  <form  method="POST">
+    <textarea name="comment" class="feedbacktext"></textarea>
     <br>
     <br>
-      <button type="button" onclick="location.href='{{ url_for('sdash') }}'" name="button">Submit</button>
+      <button type="submit">Submit</button>
   </form>
   <p><i>Note: need to add a message successfully submited form</i></p>
 </div>

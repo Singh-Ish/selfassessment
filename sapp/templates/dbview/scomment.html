@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br><br>
+<h2>various students comments are </h2>
+<br><br>
+<table>
+    <tr>
+        <th>Student Id</th>
+        <th>Name </th>
+        <th>Comment</th>
+    </tr>
+
+    {% for c in comm %}
+    <tr>
+        <th>{{c.userId}}</th>
+        <th>{{c.name}} </th>
+        <th>{{c.comment}}</th>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+
+
+
+{% endblock %}

@@ -83,3 +83,8 @@ class emailtemplate(db.Document):
     subject = db.StringField()
     message = db.StringField()
 
+
+class feedback(db.Document):
+    userId = db.IntField(unique=True)
+    name = db.StringField()
+    comment = db.StringField()

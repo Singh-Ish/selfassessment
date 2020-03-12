@@ -1,6 +1,6 @@
 from sapp import app,db,api,mail
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify
-from sapp.models import User, rubics, projects, samatrix, emailtemplate
+from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback
 from sapp.forms import LoginForm, RegisterForm 
 from flask import flash
 from werkzeug.utils import secure_filename
@@ -131,36 +131,42 @@ def fdash():
     proj = projects.objects.all()
     return render_template("dash/fdash.html", proj=proj, ru=ru,fdash=True)
 
+
 # submitting the student response matrix
 @app.route("/saSubmit",methods=['GET','POST'])
 def saSubmit():
     userId= session.get('userId')
     name = session['username']
-    # resetting the data in samatrix for the user
-    samatrix.objects(sid=userId).delete()
 
+    
     # initializing the rubics objects
     ru=rubics.objects()
 
     # retrieving the relevant data from Projects
     su = projects.objects(userId=userId).first()
     mgroup = projects.objects(groupNo=su.groupNo)
-    # creating the sa matrix table variable and setting the deafult value to 4 ( max )
 
-    for g in mgroup:
-        sid = userId
-        fsid = g.userId
-        fsname = g.firstName +" "+ g.lastName
+    user = projects.objects(userId=userId).first()
+    # resetting the data in samatrix for the user
+    if  user.assessmentStatus == 0:
+        samatrix.objects(sid=userId).delete()
 
-        for r in ru:
-            indicator = r.Indicator
-            value = 4
-            sam = samatrix(sid= sid, fsid=fsid,fsname=fsname,Indicator=indicator,value=value)
-            sam.save()
-            print("The assessment drop down list have been reset")
-            #print(sam)
-            #print("initializing samatrix for {id}".format(id=fsid) )
-            #! if already there then update it don't create more variables
+        # creating the sa matrix table variable and setting the deafult value to 4 ( max )
+
+        for g in mgroup:
+            sid = userId
+            fsid = g.userId
+            fsname = g.firstName +" "+ g.lastName
+
+            for r in ru:
+                indicator = r.Indicator
+                value = 4
+                sam = samatrix(sid= sid, fsid=fsid,fsname=fsname,Indicator=indicator,value=value)
+                sam.save()
+                print("The assessment drop down list have been reset")
+                #print(sam)
+                #print("initializing samatrix for {id}".format(id=fsid) )
+                #! if already there then update it don't create more variables
 
     # retrieving the values for the id from database
     samat=samatrix.objects(sid=userId)
@@ -169,7 +175,25 @@ def saSubmit():
     if request.method == 'POST':
         value = request.form.getlist('val')
         print(value)
-        flash("response have been saved!","success")
+
+        i=0
+        sid = userId
+        for r in ru:
+            ind = r.Indicator
+            for g in mgroup:
+                fsid = g.userId
+                fsname = g.firstName + " " + g.lastName
+                user = samatrix.objects(sid=sid,fsid=fsid,Indicator=ind).first()
+                user.value = value[i]
+
+                user.save()
+                #print(user.Indicator)
+                #print(fsname)
+                #print(ind)
+                #print("value" + value[i] )
+                i = i+1
+
+       # flash("self assessment resposne has been saved ", "success")
         return redirect(url_for('fsa'))
 
     return render_template("saSubmit.html",samat = samat,mgroup=mgroup, ru =ru, name = name,  saSubmit=True)
@@ -177,11 +201,10 @@ def saSubmit():
 
 
 
-# route for fsa
-@app.route("/fsa")
+############# route for fsa and changing assessment status
+@app.route("/fsa" , methods=['GET', 'POST'])
 def fsa():
     ## update the assessment status to 1 
-    
     userId= session.get('userId')  
     su = projects.objects(userId=userId).first()
     if (su.assessmentStatus==0):
@@ -189,12 +212,31 @@ def fsa():
         print(su.assessmentStatus)
         su.assessmentStatus=1
         su.save()
-    print("Alredy submitted the assessment")
+    
+
+    # need to save the response form the feedback
+    if request.method == 'POST':
+        com = request.form['comment']
+        userId = session.get('userId')
+        uf = feedback.objects(userId=userId).first()
+        if uf:
+            uf.comment = com
+            uf.save()
+            print("comment has been updated to the database")
+        else: 
+            user = projects.objects(userId=userId).first()
+            name = user.firstName = " " + user.lastName
+            f = feedback(userId=userId, name=name , comment = com)
+            f.save()
+            print("comment has been saved to the database")
+        
+        flash("response have been saved!", "success")
+        return redirect(url_for('sdash'))
     return render_template("other/fsa.html")
 
 
 #############################
-# upload the excel file to the database
+# upload the rubics excel file to the database
 @app.route('/uploader', methods=['GET','POST'])
 def uploader():
     if request.method =='POST':
@@ -233,14 +275,17 @@ def user():
     #User(userId=222,firstName="Mary",lastName="jane",email="mary.jane@uta.com", password="password123").save()
 
     users = User.objects.all()
-    return render_template("user.html",users=users)
+    return render_template("dbview/user.html",users=users)
 
 @app.route("/project")
 def project():
     proj = projects.objects.all()
-    return render_template("project.html",proj=proj)
+    return render_template("dbview/project.html",proj=proj)
 
-
+@app.route("/scomment")
+def scomment():
+    com = feedback.objects.all()
+    return render_template("dbview/scomment.html", comm= com)
 
 ############# sending a Email ############
 

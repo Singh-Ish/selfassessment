@@ -13,8 +13,8 @@
  </tr>
 {% for p in proj %}
 <tr>
-  <td>{{ p.title }}</td>
   <td>{{ p.groupNo }}</td>
+  <td>{{ p.title }}</td>
   <td>{{p.userId}}</td>
   <td>{{p.firstName}} {{p.lastName}}</td>
   {% if (p.assessmentStatus == 0) %}
@@ -22,10 +22,14 @@
   {% else %}
   <td><span class="gdot"></span></td>
   {% endif %}
-  <td> <a href="#">link</a></td>
-
-</tr>
+  <td>
+    <form action="{{url_for('emailone')}}" method="POST">
+      <input type="hidden" name="userId" value="{{p.userId}}">
+      <button>Reminder</button>
+    </form>
+    </tr>
 {% endfor %}
+
 </table>
 <br>
 <br>
