@@ -77,6 +77,9 @@ class samatrix(db.Document):
     value = db.IntField()
 
 
-
-
+class emailtemplate(db.Document):
+    #userId = db.IntField(unique=True, required=True) in future there will be multiple admins so multiple templates
+    sender = db.StringField()
+    subject = db.StringField()
+    message = db.StringField()
 

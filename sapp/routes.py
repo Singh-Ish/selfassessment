@@ -1,6 +1,6 @@
 from sapp import app,db,api,mail
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify
-from sapp.models import User, rubics, projects , samatrix
+from sapp.models import User, rubics, projects, samatrix, emailtemplate
 from sapp.forms import LoginForm, RegisterForm 
 from flask import flash
 from werkzeug.utils import secure_filename
@@ -122,7 +122,8 @@ def sdash():
 def admindash():
     ru=rubics.objects()
     proj = projects.objects.all()
-    return render_template("dash/admindash.html",ru =ru, proj=proj, adminDash=True)
+    etemp = emailtemplate.objects().first()
+    return render_template("dash/admindash.html",etemp=etemp,ru =ru, proj=proj, adminDash=True)
 
 @app.route("/fdash")
 def fdash():
@@ -243,14 +244,35 @@ def project():
 
 ############# sending a Email ############
 
-@app.route('/email', methods=['GET', 'POST'])
-def email():
-    return render_template("email.html")
+@app.route('/emailone', methods=['GET', 'POST'])
+def emailone():
+    id = request.form["userId"]
+    print("id clicked is ",id)
+    #print(id)
+    s = User.objects(userId=id).first()
+    print(s.email)
+    temail = emailtemplate.objects().first()
+    return render_template("email.html", s=s, temail=temail)
+
+
+@app.route('/emailall', methods=['GET', 'POST'])
+def emailall():
+
+    stu = projects.objects(assessmentStatus=0)
+    temail = emailtemplate.objects().first()
+    for s in stu:
+        reciever = s.userId # use the aggreatatory function to get the email 
+        subject = temail.subject
+        message = "Dear " + s.firstName +',' + '\n'+ temail.message
+        print(reciever)
+        print(message)
+    # write code to check for the assessment for all the user and then send them the mail 
+    flash("Mail has been Sent to all the students", "success")
+    return redirect(url_for('admindash'))
 
 
 @app.route('/sendmail', methods=['GET','POST'])
-def sendmail():
-    
+def sendmail():  
     recipients = request.form["reciever"]
     recipients = list(recipients.split(","))
     body = request.form["message"]
@@ -272,5 +294,24 @@ def sendmail():
         msg.attach("image.png", "image/png", fp.read())
     '''
     
-    flash("Mail has been Sent", "success")
+    flash("Mail has been Sent to ", "success")
+    return redirect(url_for('admindash'))
+
+
+@app.route('/emailtemp', methods=['GET', 'POST'])
+def emailtemp():
+    temail= emailtemplate.objects.first()
+    
+    sen = request.form["sender"]
+    subject = request.form["subject"]
+    message = request.form["message"]
+    #semail = emailtemplate(sender=sen, subject=subject, message=message)
+    
+    temail.sender=sen
+    temail.subject=subject
+    temail.message=message
+    
+    temail.save()
+    
+    flash("Email Template has been saved ", "success")
     return redirect(url_for('admindash'))

@@ -16,8 +16,21 @@
     <h2>Student assesment Status</h2>
     <p>{self assessment table for submitting for the group members}</p>
 
+    {% include 'other/emailtemp.html'%}
+
+    <br>
+
+    <p>For sending email reminders to all students who hasn't filled the assessment
+      <form action="{{ url_for ('emailall') }}">
+        <button type="submit"> Send Reminder to All </button>
+      </form>
+    </p>
+    <br>
 
     {% include 'status/asstatus.html'%}
+
+    
+    <p>To export or download the results</p>
     <button type="button" name="button">Export result to excel</button>
     <button type="button" name="button">Mail the result to Myself</button>
   </div>
@@ -25,11 +38,7 @@
 
   <br><br>
 
-  <p>For sending email reminders click here <br>
-    <form action="{{ url_for ('email') }}">
-      <button type="submit"> Send Email </button>
-    </form>
-    </p>
+  
 
 <div class="sarules">
   <h2>category Rubics</h2>

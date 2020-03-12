@@ -25,8 +25,11 @@
     {% else %}
     <td><span class="gdot"></span></td>
     {% endif %}
-   <td> <a href="#">link</a></td>
-
+   <td> 
+    <form action="{{url_for('emailone')}}" method="POST">
+      <input type="hidden" name="userId" value="{{p.userId}}">
+      <button>Reminder</button>
+    </form> 
  </tr>
  {% endfor %}
 
