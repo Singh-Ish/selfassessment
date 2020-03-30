@@ -1,6 +1,6 @@
 from sapp import app,db,api,mail
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify
-from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback
+from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty
 from sapp.forms import LoginForm, RegisterForm 
 from flask import flash
 from werkzeug.utils import secure_filename
@@ -286,6 +286,15 @@ def project():
 def scomment():
     com = feedback.objects.all()
     return render_template("dbview/scomment.html", comm= com)
+
+@app.route("/facultymembers")
+def facultymembers():
+    #faculty.newf()
+    #flash("added new faculty list to database","success")
+
+    fac = faculty.objects.all()
+    return render_template("dbview/facultyview.html", fac=fac)
+
 
 ############# sending a Email ############
 

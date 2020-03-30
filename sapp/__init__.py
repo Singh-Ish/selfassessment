@@ -8,6 +8,7 @@ from flask_mail import Mail, Message
 
 
 
+
 app=Flask(__name__)
 
 app.config.from_object(Config)
@@ -15,7 +16,7 @@ app.config.from_object(Config)
 # admin setting
 admin = Admin(app)
 
-#admin.add_view(ModelView(User,db.session))
+#admin.add_view(ModelView)
     # adding admin to the view
 
 # initializing the mail services 

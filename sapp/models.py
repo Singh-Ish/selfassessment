@@ -88,3 +88,28 @@ class feedback(db.Document):
     userId = db.IntField(unique=True)
     name = db.StringField()
     comment = db.StringField()
+
+class faculty(db.Document):
+    lastName = db.StringField(unique=True)
+    firstName = db.StringField()
+    email = db.StringField(max_length=30, unique=True)
+
+    def newf():
+        #deleting all the previous data
+        #data = faculty.objects()
+        #data.delete()
+        #db.DeleteMany({})
+        ru = pd.read_excel('sapp/static/docs/SCEfaculty.xlsx')
+        ru.reset_index(inplace=False)
+        rub = ru.to_dict("records")
+
+        print(rub)
+        
+        for r in rub:
+            lastName = r['lastName']
+            firstName = r['firstName']
+            email = r['email']
+            s = faculty(lastName=lastName,firstName=firstName,email=email)
+            s.save()
+            print("uploaded the new faculty data to the database")
+        

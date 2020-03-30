@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br><br>
+
+{% include 'other/adbdata.html' %}
+<br><br>
+<h2>The Faculty details Overview</h2>
+<br><br>
+<table>
+    <tr>
+        <th>Last Name </th>
+        <th>First Name</th>
+        <th>Email</th>
+    </tr>
+
+    {% for f in fac %}
+    <tr>
+        <th>{{f.lastName}} </th>
+        <th>{{f.firstName}}</th>
+        <th>{{f.email}}</th>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+
+
+
+{% endblock %}
