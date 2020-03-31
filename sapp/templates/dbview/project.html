@@ -7,7 +7,8 @@
 <br><br>
 <h2>The project Database overview</h2>
 <br><br>
-<table>
+<table class="table table-bordered table-hover">
+    <thead>
     <tr>
         <th>Student Id</th>
         <th>Last Name </th>
@@ -18,20 +19,23 @@
         <th>Co Supervisor</th>
         <th>Assessment Status</th>
     </tr>
-
+    </thead>
+    <tbody>
     {% for p in proj %}  
     <tr>
-        <th>{{p.userId}}</th>
-        <th>{{p.lastName}} </th>
-        <th>{{p.firstName}}</th>
-        <th>{{p.groupNo}}</th>
-        <th>{{p.title}}</th>
-        <th>{{p.supervisor}}</th>
-        <th>{{p.coSupervisor}}</th>
-        <th>{{p.assessmentStatus}}</th>
+        <td>{{p.userId}}</td>
+        <td>{{p.lastName}} </td>
+        <td>{{p.firstName}}</td>
+        <td>{{p.groupNo}}</td>
+        <td>{{p.title}}</td>
+        <td>{{p.supervisor}}</td>
+        <td>{{p.coSupervisor}}</td>
+        <td>{{p.assessmentStatus}}</td>
     </tr>
 
     {% endfor %} 
+
+    </tbody>
 
 </table>
 

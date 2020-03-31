@@ -220,7 +220,7 @@ def saSubmit():
                 fsname = g.firstName + " " + g.lastName
                 user = samatrix.objects(sid=sid,fsid=fsid,Indicator=ind).first()
                 user.value = value[i]
-
+    
                 user.save()
                 #print(user.Indicator)
                 #print(fsname)

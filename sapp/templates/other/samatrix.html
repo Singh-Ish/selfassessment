@@ -1,43 +1,22 @@
-<table class="samatrix">
-  <!-- <caption>Self Assessment </caption> -->
 
-<!--
- <tr>
-   <td>Group Members Names</td>
-   {% for m in mgroup %}
-   <th scope="col">{{m.firstName}} {{m.lastName}}</th>
-   {% endfor %}
- </tr>
- {% for r in ru %}
- <tr>
-   <th scope="row" class='tabrowh'>{{ r.Indicator }}</th>
-   {% for m in mgroup %}
-   <td>
-     <select id="options" name= {{m.value}}>
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
-</select>
-
-   </td>
-   {% endfor %}
- </tr>
-
-  {% endfor %}
--->
 <h2>submit the feedback for group members</h2>
+
+  <!-- <caption>Self Assessment </caption> -->
+<br><br>
+
 <form  action= "{{ url_for('saSubmit') }}" method="post">
 
   <!-- <caption>Self Assessment </caption> -->
-
-
+  <table class="samatrix table table-bordered">
+  <thead>
  <tr>
    <td>Group Members Names</td>
    {% for m in mgroup %}
    <th scope="col">{{m.firstName}} {{m.lastName}}</th>
    {% endfor %}
  </tr>
+</thead>
+<tbody>
  {% for r in ru %}
  <tr>
    <th scope="row" class='tabrowh'>{{ r.Indicator }}</th>
@@ -55,9 +34,11 @@
  </tr>
 
   {% endfor %}
+  </tbody>
+  </table>
   <br><br>
-  <button type="submit" name="button">Submit response</button>
+  <button  class="btn btn-primary" type="submit" name="button">Submit response</button>
 
 </form>
 <br><br>
-</table>
+

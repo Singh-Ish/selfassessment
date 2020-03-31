@@ -6,17 +6,26 @@
 <br><br>
 <h2>  users in the database</h2>
 
+<table class="table-hover table table-bordered ">
+  <tr>
+    <th>User ID </th>
+    <th>Emails</th>
+    <th>password </th>
+  </tr>
   {% for user in users %}
-  <dl>
-    <dt>UserID: {{ user.userId }} </dt>
-    <dt>email: {{ user.email }}</dt>
-    <dt>password: {{ user.password }}</dt>
-  </dl>
+  <tr>
+    <td>UserID: {{ user.userId }} </td>
+    <td>email: {{ user.email }}</td>
+    <td>password: {{ user.password }}</td>
+  </tr>
+  
   {% else %}
-
+  
   <h3>No users yet!</h3>
-
+  
   {% endfor %}
+
+</table>
 
 
 {% endblock %}

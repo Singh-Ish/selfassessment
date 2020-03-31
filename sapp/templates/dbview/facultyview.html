@@ -8,22 +8,24 @@
 <br><br>
 <h2>The Faculty details Overview</h2>
 <br><br>
-<table>
+<table class="table table-bordered table-hover">
+    <thead>
     <tr>
         <th>Last Name </th>
         <th>First Name</th>
         <th>Email</th>
     </tr>
-
+    </thead>
+<tbody>
     {% for f in fac %}
     <tr>
-        <th>{{f.lastName}} </th>
-        <th>{{f.firstName}}</th>
-        <th>{{f.email}}</th>
+        <td>{{f.lastName}} </td>
+        <td>{{f.firstName}}</td>
+        <td>{{f.email}}</td>
     </tr>
 
     {% endfor %}
-
+    </tbody>
 </table>
 
 

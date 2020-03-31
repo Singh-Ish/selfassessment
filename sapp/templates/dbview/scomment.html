@@ -7,21 +7,25 @@
 
 <h2>various students comments are </h2>
 <br><br>
-<table>
+<table class="table table-bordered table-hover">
+    <thead>
     <tr>
         <th>Student Id</th>
         <th>Name </th>
         <th>Comment</th>
     </tr>
+    </thead>
 
+    <tbody>
     {% for c in comm %}
     <tr>
-        <th>{{c.userId}}</th>
-        <th>{{c.name}} </th>
-        <th>{{c.comment}}</th>
+        <td>{{c.userId}}</td>
+        <td>{{c.name}} </td>
+        <td>{{c.comment}}</td>
     </tr>
 
     {% endfor %}
+    </tbody>
 
 </table>
 
