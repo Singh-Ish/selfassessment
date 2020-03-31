@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br><br>
+{% include 'other/adbdata.html' %}
+<br><br>
+
+<h2>all  user and their access roles  which can be updated </h2>
+<br><br>
+<table>
+    <tr>
+        <th>Last Name </th>
+        <th>first Name </th>
+        <th>Email</th>
+        <th>Access Role </th>
+    </tr>
+
+    {% for f in urole %}
+    <tr>
+        <td>{{f.user.lastName}} </td>
+        <td>{{f.user.firstName}} </td>
+        <td>{{f.user.email}}</td>
+        <td>{{f.rname}}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+
+
+
+{% endblock %}

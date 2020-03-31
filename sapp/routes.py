@@ -1,6 +1,6 @@
 from sapp import app,db,api,mail
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify
-from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty
+from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty, role
 from sapp.forms import LoginForm, RegisterForm 
 from flask import flash
 from werkzeug.utils import secure_filename
@@ -74,6 +74,13 @@ def login():
             flash(f"{user.firstName}, you are successfully logged in!", "success")
             session['userId'] = user.userId
             session['username'] = user.firstName
+            
+
+            r= role.objects(userId=user.userId).first()
+            session['role']=r.rname
+            if(r.rname=='admin'):
+                return redirect("admindash")
+
             return redirect("/sdash") # implement various routes depemnding on the security roles
         else:
             flash("Sorry, something went wrong.","danger")
@@ -93,11 +100,14 @@ def register():
         firstName = form.firstName.data
         lastName = form.lastName.data
 
+        # check if user already exist or not 
         user=User(userId=userId, email=email, firstName=firstName, lastName=lastName )
         user.set_password(password)
         user.save()
+        r = role(userId=userId)
+        r.save()
         flash("you are successfully registeres!","success")
-        return redirect(url_for('sdash'))
+        return redirect(url_for('admindash'))
     return render_template("auth/register.html", title="Register", form=form, register=True )
 
 @app.route("/logout")
@@ -113,6 +123,10 @@ def sdash():
     if not session.get('username'):
         return redirect(url_for('login'))
     userId= session.get('userId')
+    # if no group number just move to home 
+    if not projects.objects(userId=userId).first():
+        flash("you are successfully logged in! but you don't belong to any group", "success")
+        return redirect(url_for('home'))
     su = projects.objects(userId=userId).first()
     mgroup = projects.objects(groupNo=su.groupNo)
     return render_template("dash/sdash.html",sdata= su, mgroup=mgroup, sdash=True)
@@ -120,17 +134,39 @@ def sdash():
 
 @app.route("/admindash",methods=['GET','POST'])
 def admindash():
-    ru=rubics.objects()
-    proj = projects.objects.all()
-    etemp = emailtemplate.objects().first()
-    return render_template("dash/admindash.html",etemp=etemp,ru =ru, proj=proj, adminDash=True)
+    userId = session.get('userId')
+    if not userId: 
+        flash("kindly login to proceed","danger")
+        return redirect(url_for('login'))
+
+    r = role.objects(userId=userId).first()
+
+    user = User.objects(userId=userId).first()
+    if(r.rname == 'admin'):
+        ru=rubics.objects()
+        proj = projects.objects.all()
+        etemp = emailtemplate.objects().first()
+        return render_template("dash/admindash.html",user=user,etemp=etemp,ru =ru, proj=proj, adminDash=True)
+    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    return redirect(url_for('home'))
 
 @app.route("/fdash")
 def fdash():
-    ru=rubics.objects()
-    proj = projects.objects.all()
-    return render_template("dash/fdash.html", proj=proj, ru=ru,fdash=True)
+    userId = session.get('userId')
+    if not userId:
+        flash("kindly login to proceed", "danger")
+        return redirect(url_for('login'))
 
+    r = role.objects(userId=userId).first()
+    user = User.objects(userId=userId).first()
+    print(r.rname)
+
+    if(r.rname == 'admin'):
+        ru=rubics.objects()
+        proj = projects.objects.all()
+        return render_template("dash/fdash.html", user=user, proj=proj, ru=ru,fdash=True)
+    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    return redirect(url_for('home'))
 
 # submitting the student response matrix
 @app.route("/saSubmit",methods=['GET','POST'])
@@ -138,7 +174,6 @@ def saSubmit():
     userId= session.get('userId')
     name = session['username']
 
-    
     # initializing the rubics objects
     ru=rubics.objects()
 
@@ -273,28 +308,107 @@ def uploader():
 def user():
     #User(userId=111,firstName="Christian",lastName="hur",email="christian@uta.com", password="abc1234").save()
     #User(userId=222,firstName="Mary",lastName="jane",email="mary.jane@uta.com", password="password123").save()
+    userId = session.get('userId')
+    if not userId:
+        flash("kindly login to proceed", "danger")
+        return redirect(url_for('login'))
 
-    users = User.objects.all()
-    return render_template("dbview/user.html",users=users)
+    r = role.objects(userId=userId).first()
+
+    if(r.rname == 'admin'):
+        users = User.objects.all()
+        return render_template("dbview/user.html", users=users)
+    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    return redirect(url_for('home'))
+    
 
 @app.route("/project")
 def project():
-    proj = projects.objects.all()
-    return render_template("dbview/project.html",proj=proj)
+    userId = session.get('userId')
+    if not userId:
+        flash("kindly login to proceed", "danger")
+        return redirect(url_for('login'))
+
+    r = role.objects(userId=userId).first()
+
+    if(r.rname == 'admin'):
+        proj = projects.objects.all()
+        return render_template("dbview/project.html", proj=proj)
+
+    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    return redirect(url_for('home'))
+    
 
 @app.route("/scomment")
 def scomment():
-    com = feedback.objects.all()
-    return render_template("dbview/scomment.html", comm= com)
+    userId = session.get('userId')
+    if not userId:
+        flash("kindly login to proceed", "danger")
+        return redirect(url_for('login'))
+
+    r = role.objects(userId=userId).first()
+
+    if(r.rname == 'admin'):
+        com = feedback.objects.all()
+        return render_template("dbview/scomment.html", comm=com)
+
+    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    return redirect(url_for('home'))
+    
+    
 
 @app.route("/facultymembers")
 def facultymembers():
     #faculty.newf()
     #flash("added new faculty list to database","success")
+    userId = session.get('userId')
+    if not userId:
+        flash("kindly login to proceed", "danger")
+        return redirect(url_for('login'))
 
-    fac = faculty.objects.all()
-    return render_template("dbview/facultyview.html", fac=fac)
+    r = role.objects(userId=userId).first()
 
+    if(r.rname == 'admin'):
+        fac = faculty.objects.all()
+        return render_template("dbview/facultyview.html", fac=fac)
+
+    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    return redirect(url_for('home'))
+
+    
+
+@app.route("/arole")
+def arole():
+    userId = session.get('userId')
+    if not userId:
+        flash("kindly login to proceed", "danger")
+        return redirect(url_for('login'))
+
+    r = role.objects(userId=userId).first()
+
+    if(r.rname == 'admin'):
+        userrole = list(role.objects.aggregate(*[
+            {
+                '$lookup': {
+                    'from': 'user',
+                    'localField': 'userId',
+                    'foreignField': 'userId',
+                    'as': 'user'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$user',
+                    'preserveNullAndEmptyArrays': False
+                }
+            }
+        ]))
+
+        return render_template("dbview/arole.html", urole=userrole)
+
+    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    return redirect(url_for('home'))
+
+    
 
 ############# sending a Email ############
 

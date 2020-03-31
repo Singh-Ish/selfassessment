@@ -113,3 +113,9 @@ class faculty(db.Document):
             s.save()
             print("uploaded the new faculty data to the database")
         
+
+#role based authentication 
+
+class role(db.Document):
+    userId = db.IntField(unique=True)
+    rname = db.StringField(max_length=30, default='student')
