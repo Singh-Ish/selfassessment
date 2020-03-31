@@ -9,22 +9,29 @@
 <h2>all  user and their access roles  which can be updated </h2>
 <br><br>
 <table class="table table-bordered table-hover">
+    <thead>
     <tr>
+        <th>userId </th>
         <th>Last Name </th>
         <th>first Name </th>
         <th>Email</th>
         <th>Access Role </th>
     </tr>
-
+    </thead>
+    
+    <tbody>
     {% for f in urole %}
     <tr>
+        <td>{{f.userId}} </td>
         <td>{{f.user.lastName}} </td>
         <td>{{f.user.firstName}} </td>
         <td>{{f.user.email}}</td>
         <td>{{f.rname}}</td>
     </tr>
+    
 
     {% endfor %}
+    </tbody>
 
 </table>
 

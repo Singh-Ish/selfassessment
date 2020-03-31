@@ -240,7 +240,7 @@ def saSubmit():
 @app.route("/fsa" , methods=['GET', 'POST'])
 def fsa():
     ## update the assessment status to 1 
-    userId= session.get('userId')  
+    userId= session.get('userId') 
     su = projects.objects(userId=userId).first()
     if (su.assessmentStatus==0):
         print(" the assessment status is")
