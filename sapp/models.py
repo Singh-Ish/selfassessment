@@ -119,3 +119,4 @@ class faculty(db.Document):
 class role(db.Document):
     userId = db.IntField(unique=True)
     rname = db.StringField(max_length=30, default='student')
+

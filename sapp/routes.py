@@ -1,5 +1,5 @@
 from sapp import app,db,api,mail
-from flask import render_template, request,json,Response, redirect , url_for , session, jsonify
+from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file
 from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty, role
 from sapp.forms import LoginForm, RegisterForm 
 from flask import flash
@@ -62,6 +62,7 @@ def home():
 @app.route("/login", methods=['GET','POST'])
 def login():
     if session.get('username'):
+        flash("you are already logged in ", "success")
         return redirect(url_for('home'))
 
     form = LoginForm()
@@ -90,6 +91,7 @@ def login():
 @app.route("/register",methods=['GET','POST']) # once register it should go to the admin to approve and connect the supervisor to the project
 def register():
     if session.get('username'):
+        flash("you are already registered in ","success")
         return redirect(url_for('home'))
     # check if the student is registered or not using a unique user Id
     form = RegisterForm()
@@ -101,9 +103,14 @@ def register():
         lastName = form.lastName.data
 
         # check if user already exist or not 
+        if  User.objects(userId=userId).first() or User.objects(email=email).first():
+            flash("user Id or email already exist")
+            return redirect(url_for('register'))
+        # adding the user to the database 
         user=User(userId=userId, email=email, firstName=firstName, lastName=lastName )
         user.set_password(password)
         user.save()
+        # assigning  the deafult role to the user as student 
         r = role(userId=userId)
         r.save()
         flash("you are successfully registeres!","success")
@@ -432,8 +439,8 @@ def emailall():
         reciever = s.userId # use the aggreatatory function to get the email 
         subject = temail.subject
         message = "Dear " + s.firstName +',' + '\n'+ temail.message
-        print(reciever)
-        print(message)
+        #print(reciever)
+        #print(message)
     # write code to check for the assessment for all the user and then send them the mail 
     flash("Mail has been Sent to all the students", "success")
     return redirect(url_for('admindash'))
@@ -483,3 +490,83 @@ def emailtemp():
     
     flash("Email Template has been saved ", "success")
     return redirect(url_for('admindash'))
+
+@app.route('/download',methods=['GET','POST'])
+def download():
+    # doing the export the result first 
+    print("hello from download function")
+    pro = projects.objects.all() # reading all the projects 
+    ru = rubics.objects.all()
+
+    '''
+    #initializing a dataframe for result 
+    col = ['userId', 'firstName', 'lastName']
+    #dfres = pd.DataFrame(columns=['userId', 'firstName', 'lastName'])
+    for r in ru:
+        col.append(r.Indicator)
+        #print(col)
+
+    #dfres = pd.DataFrame(col)
+    #print(dfres)
+    '''
+    result = []
+    for p in pro:
+        rin = dict([('userId', p.userId),('firstName',p.firstName),('lastName',p.lastName)])
+        
+        for r in ru: 
+            res = samatrix.objects(fsid=1, Indicator=r.Indicator)
+            res = res.to_json()
+            res = json.loads(res)
+            df = pd.DataFrame(res)
+            #print(df)
+            vavg = df[['value']].mean()
+            vavg = round(vavg, 2)
+
+            rinl = dict([(r.Indicator, float(vavg))])
+            #print(rinl)
+            rin.update(rinl)
+
+        #print(rin)
+        result.append(rin)
+        #res.update(rin)
+    
+    #print(result)
+    #jsonrin= json.dumps(rin)
+    #dictrin= json.loads(jsonrin)
+    #print(dictrin)
+    dfres = pd.DataFrame(result)
+    print(dfres)
+    dfres.to_excel('assessmentresult.xlsx')
+    return redirect(url_for('admindash'))
+
+'''
+    # converting to dataframe to save it to excel 
+    print(type(p))
+    pjson = p.to_json()
+    pdic = json.loads(pjson)
+    print(pdic)
+    df = pd.DataFrame(pdic)
+    print(df)
+    df.info()
+
+
+
+    # saving a file to the local computer 
+    #df.to_csv("assessmentresult.csv")
+    #df.to_excel("file.xlsx")
+    #df.to_excel("assessmentresults.xlsx")
+    #f = "file.xlsx"
+
+    #p = os.path.join(app.config['UPLOAD_FOLDER'], "/rubicsMetrix.xlsx")
+    #print(p)
+
+    send_file(f, as_attachment=True)
+    try:
+        send_file(f, as_attachment=True)
+        print("saving file ")
+    except:
+        print("can't download the file ")
+    #send_file(path,as_attachment=True)
+'''
+
+     
