@@ -68,7 +68,17 @@ class projects(db.Document):
     firstName = db.StringField( max_length=50)
     assessmentStatus = db.IntField()
 
-# sa Matrix
+    def pupload():
+        
+        print(" hello from the project upload function")
+        pf = pd.read_excel('sapp/static/docs/projectDetails.xlsx')
+        pf = pf.fillna(method='ffill')
+        print(pf)
+
+
+
+
+######## sa Matrix
 class samatrix(db.Document):
     sid = db.IntField()
     fsid = db.IntField()
@@ -77,18 +87,21 @@ class samatrix(db.Document):
     value = db.IntField()
 
 
+
 class emailtemplate(db.Document):
     #userId = db.IntField(unique=True, required=True) in future there will be multiple admins so multiple templates
     sender = db.StringField()
     subject = db.StringField()
     message = db.StringField()
 
-
+########## students comments and feedback 
 class feedback(db.Document):
     userId = db.IntField(unique=True)
     name = db.StringField()
     comment = db.StringField()
 
+
+####### faculty related data for sending email automatically once all the groups submit the assesment 
 class faculty(db.Document):
     lastName = db.StringField(unique=True)
     firstName = db.StringField()
@@ -114,8 +127,7 @@ class faculty(db.Document):
             print("uploaded the new faculty data to the database")
         
 
-#role based authentication 
-
+#######role based authentication 
 class role(db.Document):
     userId = db.IntField(unique=True)
     rname = db.StringField(max_length=30, default='student')

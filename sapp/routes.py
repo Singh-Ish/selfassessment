@@ -1,5 +1,5 @@
 from sapp import app,db,api,mail
-from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file
+from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file,send_from_directory
 from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty, role
 from sapp.forms import LoginForm, RegisterForm 
 from flask import flash
@@ -300,13 +300,37 @@ def uploader():
             return redirect(url_for('admindash'))
 
         sf = secure_filename(f.filename)
+        print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
         f.save(os.path.join(app.config['UPLOAD_FOLDER'],sf))
         flash("uploaded file successfully","success")
-        rubics.uploadnew()        # update the rubics data in the database
-
+        try:
+            rubics.uploadnew()        # update the rubics data in the database
+            flash("successfully saved the rubics cube details to the database", "success")
+        except:
+            flash("can't update save the rubics cube details to the database","danger")
 
         return redirect(url_for('admindash'))
 
+
+@app.route('/pupload', methods=['GET', 'POST'])
+def pupload():
+    if request.method == 'POST':
+
+        f = request.files['file']
+        print(f.filename)
+
+        if f.filename == '':
+            flash('No selected File', "danger")
+            return redirect(url_for('admindash'))
+
+        sf = secure_filename(f.filename)
+        
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'],sf))
+        projects.pupload()
+        flash("uploaded Project details file successfully", "success")
+        #rubics.uploadnew()        # update the rubics data in the database
+
+        return redirect(url_for('admindash'))
 
 ######################################
 # viewing the user database
@@ -491,24 +515,13 @@ def emailtemp():
     flash("Email Template has been saved ", "success")
     return redirect(url_for('admindash'))
 
-@app.route('/download',methods=['GET','POST'])
-def download():
+@app.route('/eval',methods=['GET','POST'])
+def eval():
     # doing the export the result first 
-    print("hello from download function")
+    print("hello from eval function ")
     pro = projects.objects.all() # reading all the projects 
     ru = rubics.objects.all()
 
-    '''
-    #initializing a dataframe for result 
-    col = ['userId', 'firstName', 'lastName']
-    #dfres = pd.DataFrame(columns=['userId', 'firstName', 'lastName'])
-    for r in ru:
-        col.append(r.Indicator)
-        #print(col)
-
-    #dfres = pd.DataFrame(col)
-    #print(dfres)
-    '''
     result = []
     for p in pro:
         rin = dict([('userId', p.userId),('firstName',p.firstName),('lastName',p.lastName)])
@@ -518,55 +531,43 @@ def download():
             res = res.to_json()
             res = json.loads(res)
             df = pd.DataFrame(res)
-            #print(df)
+            
             vavg = df[['value']].mean()
             vavg = round(vavg, 2)
 
             rinl = dict([(r.Indicator, float(vavg))])
-            #print(rinl)
+            
             rin.update(rinl)
-
-        #print(rin)
-        result.append(rin)
-        #res.update(rin)
-    
-    #print(result)
-    #jsonrin= json.dumps(rin)
-    #dictrin= json.loads(jsonrin)
-    #print(dictrin)
-    dfres = pd.DataFrame(result)
-    print(dfres)
-    dfres.to_excel('assessmentresult.xlsx')
-    return redirect(url_for('admindash'))
-
-'''
-    # converting to dataframe to save it to excel 
-    print(type(p))
-    pjson = p.to_json()
-    pdic = json.loads(pjson)
-    print(pdic)
-    df = pd.DataFrame(pdic)
-    print(df)
-    df.info()
-
-
-
-    # saving a file to the local computer 
-    #df.to_csv("assessmentresult.csv")
-    #df.to_excel("file.xlsx")
-    #df.to_excel("assessmentresults.xlsx")
-    #f = "file.xlsx"
-
-    #p = os.path.join(app.config['UPLOAD_FOLDER'], "/rubicsMetrix.xlsx")
-    #print(p)
-
-    send_file(f, as_attachment=True)
-    try:
-        send_file(f, as_attachment=True)
-        print("saving file ")
-    except:
-        print("can't download the file ")
-    #send_file(path,as_attachment=True)
-'''
-
      
+        result.append(rin)
+    
+    dfres = pd.DataFrame(result)
+    filename = 'assessmentresult.xlsx'
+    dfres.to_excel(filename)
+    print(" save the xls file")
+
+    return redirect(url_for('download'))
+    #fname = "assessmentresult.xlsx"
+
+    #send_from_directory(app.config['UPLOAD_FOLDER'],filename=fname,as_attachment=True)
+    #send_file(fname,as_attachment=True)
+    
+
+
+@app.route('/download', methods=['GET', 'POST'])
+def download():
+    print(" hello from download ")
+    filename = "assessmentresult.xlsx"
+    try: 
+        return send_file(os.path.join(os.getcwd(), filename), as_attachment=True)
+
+    except:
+        flash("can't doenload the file please contact the developer","danger")
+        return redirect(url_for('admindash'))
+   
+    
+@app.route('/emailself', methods=['GET', 'POST'])
+def emailself():
+
+    flash("the Email has been sent and the result has been send as an attachement ","success")
+    return redirect(url_for('admindash'))
