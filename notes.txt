@@ -12,8 +12,8 @@ things to do
 6. restful api for admin to make necessary changes
 7. table data sorting by clicking on the headers  
 8. learn how to create sessions an dsave value just for that user
-9. mapping the user id and the email for integration of existing system    
-10. upload the new project and faculty details to the system 
+
+
 
 
 Notes : 

@@ -1,4 +1,4 @@
-from sapp import app,db,api,mail
+from sapp import app,db,mail
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file,send_from_directory
 from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty, role
 from sapp.forms import LoginForm, RegisterForm 
@@ -14,7 +14,8 @@ from flask_mail import Mail, Message
 #from flask_mail import Mail
 
 #############################
-#API
+'''
+#API for sa matrix 
 @api.route('/api','/api/')
 class GetAndPost(Resource):
     #get all
@@ -45,6 +46,10 @@ class GetUpdateDelete(Resource):
     def delete(self,idex):
         samatrix.objects(sid=idx).delete()
         return jsonify("User is deleted")
+
+
+'''
+
 #############################
 
 
@@ -325,7 +330,7 @@ def pupload():
 
         sf = secure_filename(f.filename)
         
-        f.save(os.path.join(app.config['UPLOAD_FOLDER'],sf))
+        #f.save(os.path.join(app.config['UPLOAD_FOLDER'],sf))
         projects.pupload()
         flash("uploaded Project details file successfully", "success")
         #rubics.uploadnew()        # update the rubics data in the database

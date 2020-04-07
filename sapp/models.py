@@ -69,13 +69,41 @@ class projects(db.Document):
     assessmentStatus = db.IntField()
 
     def pupload():
+        try: 
+
+            pf = pd.read_excel('sapp/static/docs/projectDetails.xlsx')
+            pf = pf.fillna(method='ffill')
+            pf.groupNo = pf.groupNo.astype(int)
+            pf.userId = pf.userId.astype(int)
+            pf.assessmentStatus = pf.assessmentStatus.astype(int)
+            pf.coSupervisor = pf.coSupervisor.astype(object)
+            print(pf.dtypes)
+            # removing the duplication enteries and creating a new dataframe df
+            pf = pf.drop_duplicates()
         
-        print(" hello from the project upload function")
-        pf = pd.read_excel('sapp/static/docs/projectDetails.xlsx')
-        pf = pf.fillna(method='ffill')
-        print(pf)
+            print(pf.columns)
+            pf.reset_index(inplace=False)
+            pf = pf.to_dict("records")
+            print(pf)
 
-
+            for p in pf:
+                groupNo = p['groupNo']
+                title = p['title']
+                supervisor = p['supervisor']
+                coSupervisor = p['coSupervisor']
+                userId = p['userId']
+                lastName = p['lastName']
+                firstName = p['firstName']
+                assessmentStatus = p['assessmentStatus']
+                try:
+                    s = projects(groupNo=groupNo, title=title, supervisor=supervisor, userId=userId,
+                             lastName=lastName, firstName=firstName, assessmentStatus=assessmentStatus)
+                    s.save()
+                    print("uploaded the new projects data to the database")
+                except:
+                    print("can't save the project dat to the database")
+        except:
+            print(" can't read the project data file ")
 
 
 ######## sa Matrix

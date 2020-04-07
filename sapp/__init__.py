@@ -7,8 +7,6 @@ from flask_restplus import Api
 from flask_mail import Mail, Message
 
 
-
-
 app=Flask(__name__)
 
 app.config.from_object(Config)
@@ -16,20 +14,20 @@ app.config.from_object(Config)
 # admin setting
 admin = Admin(app)
 
-#admin.add_view(ModelView)
-    # adding admin to the view
+
 
 # initializing the mail services 
 mail = Mail(app)
 
 
 # adding the API for the application
-api=Api()
-api.init_app(app)
+#api=Api()
+#api.init_app(app)
 
 
 
 app.run()
+
 # database settings
 try :
     db = MongoEngine()
@@ -39,9 +37,6 @@ except:
 
 db.init_app(app)
 
-#admin.add_view(ModelView(User,db.session))
 
-# Initializing flask mail server
-#mail = Mail(app)
 
 from sapp import routes
