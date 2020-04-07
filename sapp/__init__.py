@@ -7,6 +7,13 @@ from flask_restplus import Api
 from flask_mail import Mail, Message
 
 
+
+
+# running the application 
+if __name__ == "__main__":
+    app.run()
+
+
 app=Flask(__name__)
 
 app.config.from_object(Config)

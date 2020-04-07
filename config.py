@@ -3,6 +3,9 @@ import os
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or "secret_string"
 
+    # changing the server name 
+    #SERVER_NAME = '127:0.0.1:6000'
+
     #database setting
     MONGODB_SETTINGS= {'db' :'assessment'}
 
