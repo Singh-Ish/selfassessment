@@ -1,5 +1,5 @@
 import flask
-from sapp import db
+from sapp import db 
 from werkzeug.security import generate_password_hash, check_password_hash
 from sapp import admin
 import pandas as pd

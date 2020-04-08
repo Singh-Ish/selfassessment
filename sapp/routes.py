@@ -1,4 +1,4 @@
-from sapp import app,db,mail
+from sapp import app,db,mail,api
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file,send_from_directory
 from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty, role
 from sapp.forms import LoginForm, RegisterForm 
@@ -14,41 +14,45 @@ from flask_mail import Mail, Message
 #from flask_mail import Mail
 
 #############################
-'''
-#API for sa matrix 
-@api.route('/api','/api/')
-class GetAndPost(Resource):
+
+
+
+## api for users ##
+@api.route('/api/user','/api/user/')
+class getpost(Resource):
     #get all
     def get(self):
-        return jsonify(samatrix.objects.all())
+        return jsonify(User.objects.all())
 
-    #post data
+    #POST 
     def post(self):
-        data = api.payload
-        matrix=samatrix(sid=data['sid'], fsid=data['fsid'], fsname=data['fsname'], Indicator=data['Indicator'],value=data['value'] )
-        matrix.save()
-        return jsonify(samatrix.objects(userId = data['userId']))
+        data=api.payload
+        user = User(userId=data['userId'],firstName=data['firstName'],lastName=data['lastName'],email=data['email'],password=data['password'])
+        user.save()
+        r = role(userId=data['userId'])
+        r.save()
+        return jsonify(User.objects(userId=data['userId']))
 
 
-@api.route('/api/<idx>')
-class GetUpdateDelete(Resource):
+    #put
+
+@api.route('/api/user/<idx>')
+class user_update_delete(Resource):
     # get data request
-    def get(self,idx):
-        return jsonify(samatrix.objects(sid=idx))
+    def get(self, idx):
+        return jsonify(User.objects(userId=idx))
 
-    # put data
+    #Put 
     def put(self,idx):
         data = api.payload
-        samatrix.objects(sid = idx).update(**data)
-        return jsonify(samatrix.objects(sid=idx))
+        User.objects(userId=idx).update(**data)
+        return jsonify(User.objects(userId=idx))
 
     # delete data  reqest
-    def delete(self,idex):
-        samatrix.objects(sid=idx).delete()
-        return jsonify("User is deleted")
-
-
-'''
+    def delete(self, idx):
+        User.objects(userId=idx).delete()
+        role.objects(userId=idx).delete()
+        return jsonify("User "+idx+" is deleted")
 
 #############################
 
@@ -356,7 +360,7 @@ def user():
         return render_template("dbview/user.html", users=users)
     flash("you don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
-    
+
 
 @app.route("/project")
 def project():
