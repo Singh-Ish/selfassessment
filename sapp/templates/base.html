@@ -66,28 +66,30 @@
 
     }
 
-    .container{
-      height: 100%;
-      overflow:auto;
-      padding-bottom:100px;
-    }
-    
-    body{
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+   
+    #content-wrap {
+      min-height: 100vh; /* will cover the 100% of viewport */
+      display: block;
+      position: relative;
+      overflow: hidden; 
+      margin-top: 2em;  
     }
 
     .footer{
       background-color:#f8f9fa;
-      margin-top: auto;
-    }
+      width: 100%;
+      margin-top: 10px;
+      
+      }
+
     </style>
 
   </head>
 
   <!-- body begins -->
   <body>
+
+    <div id="page-container">
 
     {% include 'includes/nav.html' %}
 
@@ -101,7 +103,7 @@
           {% endif %}
     {% endwith %}
 
-<div class="container">
+<div class="container" id="content-wrap">
   {% block content %}
 
   {% endblock %}
@@ -110,6 +112,6 @@
 
 
 {% include 'includes/footer.html' %}
-
+</div>
   </body>
 </html>
