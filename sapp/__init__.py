@@ -28,8 +28,8 @@ mail = Mail(app)
 
 
 # adding the API for the application
-api=Api()
-api.init_app(app)
+#api=Api()
+#api.init_app(app)
 
 
 

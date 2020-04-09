@@ -1,4 +1,4 @@
-from sapp import app,db,mail,api
+from sapp import app,db,mail
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file,send_from_directory
 from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty, role
 from sapp.forms import LoginForm, RegisterForm 
@@ -16,7 +16,7 @@ from flask_mail import Mail, Message
 #############################
 
 
-
+"""
 ## api for users ##
 @api.route('/api/user','/api/user/')
 class getpost(Resource):
@@ -55,7 +55,7 @@ class user_update_delete(Resource):
         return jsonify("User "+idx+" is deleted")
 
 #############################
-
+"""
 
 @app.route("/")
 @app.route("/index")
@@ -93,7 +93,7 @@ def login():
 
             return redirect("/sdash") # implement various routes depemnding on the security roles
         else:
-            flash("Sorry, something went wrong.","danger")
+            flash("Sorry, you don't have permission to view the page ","danger")
     return render_template("auth/login.html", title="Login", form=form, login=True )
 
 
@@ -110,20 +110,34 @@ def register():
         password = form.password.data
         firstName = form.firstName.data
         lastName = form.lastName.data
+        
+
 
         # check if user already exist or not 
         if  User.objects(userId=userId).first() or User.objects(email=email).first():
-            flash("user Id or email already exist")
+            flash("user Id  already exist")
             return redirect(url_for('register'))
+
         # adding the user to the database 
-        user=User(userId=userId, email=email, firstName=firstName, lastName=lastName )
-        user.set_password(password)
+        user=User(userId=userId, email=email, firstName=firstName, lastName=lastName, password=password  )
+        #user.set_password(password)
         user.save()
+
         # assigning  the deafult role to the user as student 
         r = role(userId=userId)
         r.save()
-        flash("you are successfully registeres!","success")
-        return redirect(url_for('admindash'))
+
+        session['userId'] = user.userId
+        session['username'] = user.firstName
+
+
+        
+        r = role.objects(userId=user.userId).first()
+        session['role'] = r.rname
+        
+        flash("you are successfully registeres!", "success")
+        return redirect("sdash")
+         
     return render_template("auth/register.html", title="Register", form=form, register=True )
 
 @app.route("/logout")
