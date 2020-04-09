@@ -93,7 +93,7 @@ def login():
 
             return redirect("/sdash") # implement various routes depemnding on the security roles
         else:
-            flash("Sorry, you don't have permission to view the page ","danger")
+            flash("Sorry, Invalid login Information ","danger")
     return render_template("auth/login.html", title="Login", form=form, login=True )
 
 
