@@ -71,7 +71,6 @@ def home():
 # login and registeration route
 @app.route("/login", methods=['GET','POST'])
 def login():
-
     if session.get('username'):
         flash("you are already logged in ", "success")
         return redirect(url_for('home'))
@@ -85,6 +84,7 @@ def login():
 
     if request.method == 'POST':
         email = request.form['email']
+        
         print(email)
         token = s.dumps(email, salt='emailsession')
 
@@ -93,75 +93,46 @@ def login():
         # link to the token 
         link = url_for('confirm_mail', token=token, _external=True)
         print(link)
-        msg.body = "\n your login link is  \n \n {}".format(link)
+        msg.body = 'your login link is  {}'.format(link)
         mail.send(msg)
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
     
-    return render_template("auth/login.html", login=True )
+        
+    return render_template("auth/login.html", title="Login", login=True )
 
 
 @app.route('/confirm_mail/<token>')
 def confirm_mail(token):
     try:
         email = s.loads(token, salt='emailsession', max_age=3600)
-        print(email)
 
-        user = User.objects(email=email).first()
+        flash("you have successfully loged in","success")
+        return redirect(url_for("sdash"))
 
-        if user:
+    except SignatureExpired:
+        flash("the token has expired. Please try to login again","danger")
+        return redirect(url_for("login"))
+
+'''
+    # check the access role of the user map it to student details and create the route according to that 
+    user = User.objects(email=email).first()
+       if user and password == user.password:
+            flash(f"{user.firstName}, you are successfully logged in!", "success")
             session['userId'] = user.userId
             session['username'] = user.firstName
-            session['email'] = user.email
-
-            # if role is empty assign student
-            r = role.objects(userId=user.userId).first()
-            
-            if not r:
-                ro = role(userId=user.userId)
-                ro.save()
 
             r = role.objects(userId=user.userId).first()
             session['role'] = r.rname
-
-            flash(f"Welcome , You have successfully logged in", "success")
             if(r.rname == 'admin'):
                 return redirect("admindash")
-                # implement various routes depemnding on the security roles
+
+            # implement various routes depemnding on the security roles
             return redirect("/sdash")
-        
         else:
-            flash("you are not a vaid user please contact faculty or department admin","danger")
-            return redirect("home")
-        
-        
-
-    except SignatureExpired:
-        flash("The Token has been Expired. Please try to login again","danger")
-        return redirect(url_for('login'))
-
-
-
-    # check the access role of the user map it to student details and create the route according to that 
-    '''
-    user = User.objects(email=email).first()
-
-    if user and password == user.password:
-        flash(f"{user.firstName}, you are successfully logged in!", "success")
-        session['userId'] = user.userId
-        session['username'] = user.firstName
-
-        r = role.objects(userId=user.userId).first()
-        session['role'] = r.rname
-        if(r.rname == 'admin'):
-            return redirect("admindash")
-
-        # implement various routes depemnding on the security roles
-        return redirect("/sdash")
-    else:
-        flash("Sorry, Invalid login Information ", "danger")
-    '''
-
+            flash("Sorry, Invalid login Information ", "danger")
+    return "the token works and the email is {}".format(email)
+'''
 
 @app.route("/register",methods=['GET','POST']) # once register it should go to the admin to approve and connect the supervisor to the project
 def register():
@@ -206,10 +177,12 @@ def register():
          
     return render_template("auth/register.html", title="Register", form=form, register=True )
 
+
 @app.route("/logout")
 def logout():
     session['userId']=False
     session.pop('username',None)
+    session.pop('role',None)
     return redirect(url_for('home'))
 
 #####################################################
@@ -634,7 +607,7 @@ def emailself():
     return redirect(url_for('admindash'))
 
 
-####### eval #############
+####### eval 
 
 @app.route('/eval',methods=['GET','POST'])
 def eval():
@@ -686,39 +659,4 @@ def download():
         flash("can't doenload the file please contact the developer","danger")
         return redirect(url_for('admindash'))
    
-    
-
-###### token authentication 
-
-'''
-@app.route('/tlogin',methods=['GET','POST'])
-def tlogin():
-    if request.method =='GET':
-        return '<form action="/tlogin" method="POST"> <input name="email" placeholder="email"> <input type="submit"> </form>'
-
-    email = request.form['email']
-    token = s.dumps(email, salt='emailsession')
-
-    msg = Message('confirm Email token login', sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
-
-    link = url_for('confirm_mail', token=token, _external=True)
-    
-    
-    print(link)
-    msg.body = 'your login link is  {}'.format(link)
-
-    mail.send(msg)
-
-    return '<h1> the email you entered is {}. the token is {} </h1>'.format(email,token)
-
-
-@app.route('/confirm_mail/<token>')
-def confirm_mail(token):
-    try:
-        email = s.loads(token, salt='emailsession', max_age=3600)
-
-    except SignatureExpired:
-        return '<h1> the token is expired!</h1>'
-
-    return "the token works and the email is {}".format(email)
-'''
+ 
