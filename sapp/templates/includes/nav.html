@@ -34,7 +34,7 @@
 
 
           {% if not session['username'] %}
-          <a class="nav-item nav-link  {% if login %}active {% endif %}" href="{{ url_for('register') }}">Sign Up</a>
+          
           <a class="nav-item nav-link  {% if login %}active {% endif %}" href="{{ url_for('login') }}">Login</a>
           
           {%else %}

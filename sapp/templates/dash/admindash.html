@@ -53,7 +53,7 @@
 {% include 'other/adbdata.html' %}
 
 
-<!-- uplaoder of rubics cube and the prjects -->
+<!-- project uploader  -->
 <br><br>
 <h2>Uploaders </h2>
 <br>
@@ -71,9 +71,25 @@ click her <a href="">Preview </a>  to view the uploaded project details
 </div>
 
 <br><br>
+<!-- User data uploader -->
+<div class="sarules project">
+  <p><b>User Details </b></p>
+  <p>Upload the latest file containig the student details, who should have access to this portal</p>
+  <br>
+  <form class="fupload" action="" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value=Upload />
+  </form>
+  <br>
+  click her <a href="">Preview </a> to view the student details 
+</div>
+
+<br><br>
+
+
+<!-- rubic cube uploader -->
 <div class="sarules">
-  <p><b>category Rubics </b></p>
-  
+  <p><b>category Rubics </b></p>  
   <br>
   <form class="fupload" action="/uploader" method="POST" enctype="multipart/form-data">
     <input type="file" name="file">

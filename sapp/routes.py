@@ -155,7 +155,7 @@ def confirm_mail(token):
         else:
             flash("Sorry, Invalid login Information ", "danger")
     return "the token works and the email is {}".format(email)
-'''
+
 
 @app.route("/register",methods=['GET','POST']) # once register it should go to the admin to approve and connect the supervisor to the project
 def register():
@@ -199,7 +199,7 @@ def register():
         return redirect("sdash")
          
     return render_template("auth/register.html", title="Register", form=form, register=True )
-
+'''
 
 @app.route("/logout")
 def logout():
@@ -213,6 +213,7 @@ def logout():
 @app.route("/sdash/")
 def sdash():
     if not session.get('username'):
+        flash(f"you are not currently logged in. Kindly login to proceed","danger")
         return redirect(url_for('login'))
     userId= session.get('userId')
     # if no group number just move to home 
