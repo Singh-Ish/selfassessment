@@ -1,5 +1,5 @@
-from sapp import app,db,mail
-from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file,send_from_directory
+from sapp import app,db,mail,s
+from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file,send_from_directory, url_for
 from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty, role
 from sapp.forms import LoginForm, RegisterForm 
 from flask import flash
@@ -7,8 +7,8 @@ from werkzeug.utils import secure_filename
 import os
 import pandas as pd
 from flask_restplus import Resource
-from sapp import db
 from flask_mail import Mail, Message
+from itsdangerous import URLSafeSerializer , SignatureExpired
 
 #from flask_user import role_required, UserManager, UserMixin
 #from flask_mail import Mail
@@ -67,34 +67,100 @@ def home():
         lo = False
     return render_template("index.html", home=lo)
 
+
 # login and registeration route
 @app.route("/login", methods=['GET','POST'])
 def login():
+
     if session.get('username'):
         flash("you are already logged in ", "success")
         return redirect(url_for('home'))
 
+    '''
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
+    '''
+
+    if request.method == 'POST':
+        email = request.form['email']
+        print(email)
+        token = s.dumps(email, salt='emailsession')
+
+        msg = Message('confirm Email token login',sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
+
+        # link to the token 
+        link = url_for('confirm_mail', token=token, _external=True)
+        print(link)
+        msg.body = "\n your login link is  \n \n {}".format(link)
+        mail.send(msg)
+        flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
+        return redirect(url_for('login'))
+    
+    return render_template("auth/login.html", login=True )
+
+
+@app.route('/confirm_mail/<token>')
+def confirm_mail(token):
+    try:
+        email = s.loads(token, salt='emailsession', max_age=3600)
+        print(email)
 
         user = User.objects(email=email).first()
-        if user and password ==user.password:
-            flash(f"{user.firstName}, you are successfully logged in!", "success")
+
+        if user:
             session['userId'] = user.userId
             session['username'] = user.firstName
+            session['email'] = user.email
+
+            # if role is empty assign student
+            r = role.objects(userId=user.userId).first()
             
+            if not r:
+                ro = role(userId=user.userId)
+                ro.save()
 
-            r= role.objects(userId=user.userId).first()
-            session['role']=r.rname
-            if(r.rname=='admin'):
+            r = role.objects(userId=user.userId).first()
+            session['role'] = r.rname
+
+            flash(f"Welcome , You have successfully logged in", "success")
+            if(r.rname == 'admin'):
                 return redirect("admindash")
-
-            return redirect("/sdash") # implement various routes depemnding on the security roles
+                # implement various routes depemnding on the security roles
+            return redirect("/sdash")
+        
         else:
-            flash("Sorry, Invalid login Information ","danger")
-    return render_template("auth/login.html", title="Login", form=form, login=True )
+            flash("you are not a vaid user please contact faculty or department admin","danger")
+            return redirect("home")
+        
+        
+
+    except SignatureExpired:
+        flash("The Token has been Expired. Please try to login again","danger")
+        return redirect(url_for('login'))
+
+
+
+    # check the access role of the user map it to student details and create the route according to that 
+    '''
+    user = User.objects(email=email).first()
+
+    if user and password == user.password:
+        flash(f"{user.firstName}, you are successfully logged in!", "success")
+        session['userId'] = user.userId
+        session['username'] = user.firstName
+
+        r = role.objects(userId=user.userId).first()
+        session['role'] = r.rname
+        if(r.rname == 'admin'):
+            return redirect("admindash")
+
+        # implement various routes depemnding on the security roles
+        return redirect("/sdash")
+    else:
+        flash("Sorry, Invalid login Information ", "danger")
+    '''
 
 
 @app.route("/register",methods=['GET','POST']) # once register it should go to the admin to approve and connect the supervisor to the project
@@ -499,9 +565,6 @@ def sendmail():
     recipients = list(recipients.split(","))
     body = request.form["message"]
     subject = request.form["subject"]
-    print(recipients)
-    print(type(subject))
-    print(type(body))
 
     #subject = 'Mail from flask server'
     #msg = "testing the body message form flask mail "
@@ -537,6 +600,41 @@ def emailtemp():
     
     flash("Email Template has been saved ", "success")
     return redirect(url_for('admindash'))
+
+
+@app.route('/emailself', methods=['GET', 'POST'])
+def emailself():
+    id = session.get('userId')
+
+    cuser = User.objects(userId=id).first()
+    recipients = cuser.email 
+    print(recipients)
+    sender = 'ishdeepsingh@sce.carleton.ca'
+    message = " Please find attached the result excel sheet "
+    subject = " Self assesment results"
+    
+    try:
+        #with app.open_resource("assessmentresult.xlsx") as fp:
+        msg.attach("assessmentresult.xlsx","/", fp.read())
+        
+        flash("successfully added the file","success")
+    except:
+        flash("can't add the file", "danger")
+
+    try:
+        msg = Message(subject=subject, body=body,
+                      sender=sender, recipients=recipients)
+                    
+        #msg.send()
+        flash("The Email has been sent and the result has been send as an attachement ", "success")
+    except:
+        flash("Can't send mail, contact your administrator ", "danger")
+    
+    
+    return redirect(url_for('admindash'))
+
+
+####### eval #############
 
 @app.route('/eval',methods=['GET','POST'])
 def eval():
@@ -589,8 +687,38 @@ def download():
         return redirect(url_for('admindash'))
    
     
-@app.route('/emailself', methods=['GET', 'POST'])
-def emailself():
 
-    flash("the Email has been sent and the result has been send as an attachement ","success")
-    return redirect(url_for('admindash'))
+###### token authentication 
+
+'''
+@app.route('/tlogin',methods=['GET','POST'])
+def tlogin():
+    if request.method =='GET':
+        return '<form action="/tlogin" method="POST"> <input name="email" placeholder="email"> <input type="submit"> </form>'
+
+    email = request.form['email']
+    token = s.dumps(email, salt='emailsession')
+
+    msg = Message('confirm Email token login', sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
+
+    link = url_for('confirm_mail', token=token, _external=True)
+    
+    
+    print(link)
+    msg.body = 'your login link is  {}'.format(link)
+
+    mail.send(msg)
+
+    return '<h1> the email you entered is {}. the token is {} </h1>'.format(email,token)
+
+
+@app.route('/confirm_mail/<token>')
+def confirm_mail(token):
+    try:
+        email = s.loads(token, salt='emailsession', max_age=3600)
+
+    except SignatureExpired:
+        return '<h1> the token is expired!</h1>'
+
+    return "the token works and the email is {}".format(email)
+'''

@@ -5,7 +5,7 @@ from flask_admin import Admin
 from flask_admin.contrib.pymongo import ModelView
 from flask_restplus import Api
 from flask_mail import Mail, Message
-
+from itsdangerous import URLSafeTimedSerializer
 
 
 
@@ -22,6 +22,8 @@ app.config.from_object(Config)
 admin = Admin(app)
 
 
+# serializer token 
+s = URLSafeTimedSerializer('SECRET_KEY')
 
 # initializing the mail services 
 mail = Mail(app)

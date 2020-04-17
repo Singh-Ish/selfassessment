@@ -12,6 +12,15 @@ things to do
 6. restful api for admin to make necessary changes
 7. table data sorting by clicking on the headers  
 8. learn how to create sessions an dsave value just for that user
+9. disable faculty dashboard 
+
+
+use case : 
+1. whenever there is a new upload of projects : just for students 
+    - clear the projects 
+    -clear the samatrix evaluation 
+    -clear role 
+
 
 
 
