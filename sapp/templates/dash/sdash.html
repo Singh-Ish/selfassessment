@@ -21,6 +21,7 @@
     <p><b>Supervisor:</b> {{sdata["supervisor"]}}</p>
     <p> <b>co-supervisor:</b> {{sdata.coSupervisor}}</p>
       </div>
+      <br>
     <p class="note">
     <small>  <i><strong> Note</strong> For any changes to the details kindly contact your supervisor or admin staff </i> </small></p>
 
@@ -32,7 +33,14 @@
     {% include 'status/sstatus.html' %}
     
     <br>
-    <button type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Confirm and Submit Assessment</button>
+    <button class="btn btn-primary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Confirm and Submit Assessment</button>
+<!--
+    {% if(sdata.assessmentStatus == 0) %}
+    <button  class="btn btn-primary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Confirm and Submit Assessment</button>
+    {% else %}
+    <button class="btn btn-secondary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button" disabled> Confirm and Submit Assessment</button>
+    {% endif %}
+  -->
     <br><br>
 
 

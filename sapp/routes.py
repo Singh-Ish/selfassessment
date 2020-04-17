@@ -93,7 +93,7 @@ def login():
         # link to the token 
         link = url_for('confirm_mail', token=token, _external=True)
         print(link)
-        msg.body = 'your login link is  {}'.format(link)
+        msg.body = ' \n Hi your login link is \n \n {}'.format(link)
         mail.send(msg)
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
@@ -106,9 +106,32 @@ def login():
 def confirm_mail(token):
     try:
         email = s.loads(token, salt='emailsession', max_age=3600)
+        print(email)
 
-        flash("you have successfully loged in","success")
-        return redirect(url_for("sdash"))
+        user = User.objects(email=email).first()
+        
+        if user:
+            
+            session['userId'] = user.userId
+            session['username'] = user.firstName
+
+            if not role.objects(userId=user.userId).first():
+                arole = role(userId=user.userId)            
+                arole.save()
+
+            r = role.objects(userId=user.userId).first()
+            session['role'] = r.rname
+            if(r.rname == 'admin'):
+                flash(
+                    f"{user.firstName}, you are successfully logged in and have admin priveledges!", "success")
+                return redirect(url_for("admindash"))
+
+            flash(f"{user.firstName}, you are successfully logged in!", "success")
+            return redirect(url_for("sdash"))
+        else:
+            flash("you are Not a valid user. please contact the faculty or department Admin","danger")
+            return redirect(url_for("home"))
+        
 
     except SignatureExpired:
         flash("the token has expired. Please try to login again","danger")
@@ -194,7 +217,7 @@ def sdash():
     userId= session.get('userId')
     # if no group number just move to home 
     if not projects.objects(userId=userId).first():
-        flash("you are successfully logged in! but you don't belong to any group", "success")
+        flash("you are successfully logged in! but you don't belong to any group", "danger")
         return redirect(url_for('home'))
     su = projects.objects(userId=userId).first()
     mgroup = projects.objects(groupNo=su.groupNo)
@@ -210,7 +233,7 @@ def admindash():
 
     r = role.objects(userId=userId).first()
 
-    user = User.objects(userId=userId).first()
+    user = User.objects(userId=userId).first() # checking if used has admin rights or not 
     if(r.rname == 'admin'):
         ru=rubics.objects()
         proj = projects.objects.all()
