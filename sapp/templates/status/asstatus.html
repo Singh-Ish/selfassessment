@@ -1,38 +1,63 @@
 
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+          aria-expanded="false" aria-controls="collapseThree">
+          Student Assessment Status :  Click to expand 
+        </button>
+      </h2>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
+        <div class="container">
+          
+          
+        <table class="asstatus table table-bordered table-hover">
+          <!-- <caption>Self Assessment </caption> -->
+          <tr>
+            <th scope="col">Faculty Name</th>
+            <th scope="col">Project Name</th>
+            <th scope="col">group Number</th>
+            <th scope="col">Student Id</th>
+            <th scope="col">Student Name</th>
+            <th scope="col">Assessment status</th>
+            <th scope="col">Email Reminder</th>
+          </tr>
+        
+          {% for p in proj %}
+          <tr>
+            <td>{{ p.supervisor }}</td>
+            <td>{{ p.title }}</td>
+            <td>{{ p.groupNo }}</td>
+            <td>{{p.userId}}</td>
+            <td>{{p.firstName}} {{p.lastName}}</td>
+            {% if (p.assessmentStatus == 0) %}
+            <td><span class="rdot"></span></td>
+            {% else %}
+            <td><span class="gdot"></span></td>
+            {% endif %}
+            <td>
+              <form action="{{url_for('emailone')}}" method="POST">
+                <input type="hidden" name="userId" value="{{p.userId}}">
+                <button class="btn btn-outline-primary">Reminder</button>
+              </form>
+          </tr>
+          {% endfor %}
+        
+        </table>
 
 
-<table class="asstatus table table-bordered table-hover">
-  <!-- <caption>Self Assessment </caption> -->
- <tr>
-   <th scope="col">Faculty Name</th>
-   <th scope="col">Project Name</th>
-   <th scope="col">group Number</th>
-   <th scope="col">Student Id</th>
-   <th scope="col">Student Name</th>
-   <th scope="col">Assessment status</th>
-   <th scope="col">Email Reminder</th>
- </tr>
 
- {% for p in proj %}
- <tr>
-   <td>{{ p.supervisor }}</td>
-   <td>{{ p.title }}</td>
-   <td>{{ p.groupNo }}</td>
-   <td>{{p.userId}}</td>
-   <td>{{p.firstName}} {{p.lastName}}</td>
-    {% if (p.assessmentStatus == 0) %}
-    <td><span class="rdot"></span></td>
-    {% else %}
-    <td><span class="gdot"></span></td>
-    {% endif %}
-   <td> 
-    <form action="{{url_for('emailone')}}" method="POST">
-      <input type="hidden" name="userId" value="{{p.userId}}">
-      <button class="btn btn-outline-primary" >Reminder</button>
-    </form> 
- </tr>
- {% endfor %}
+        </div>
 
-</table>
-<br>
-<br>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

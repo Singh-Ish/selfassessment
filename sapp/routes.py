@@ -71,6 +71,8 @@ def home():
 # login and registeration route
 @app.route("/login", methods=['GET','POST'])
 def login():
+
+
     if session.get('username'):
         flash("you are already logged in ", "success")
         return redirect(url_for('home'))
@@ -85,6 +87,10 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         
+        if not User.objects(email=email):
+            flash(f"you have don't have access to the portal. Kindly contact the admin staff","danger")
+            return redirect(url_for('home'))
+
         print(email)
         token = s.dumps(email, salt='emailsession')
 
@@ -98,6 +104,11 @@ def login():
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
     
+    if not User.objects().first():
+        u = User(userId=1,firstName="Ish",lastName="singh",email="ishdeepsingh@sce.carleton.ca")
+        u.save() 
+        ro = role(userId=1,rname="admin")
+        ro.save()
         
     return render_template("auth/login.html", title="Login", login=True )
 
@@ -105,8 +116,7 @@ def login():
 @app.route('/confirm_mail/<token>')
 def confirm_mail(token):
     try:
-        email = s.loads(token, salt='emailsession', max_age=3600)
-        print(email)
+        email = s.loads(token, salt='emailsession', max_age=600) # token will be valid for 10 minutes 
 
         user = User.objects(email=email).first()
         
@@ -114,10 +124,6 @@ def confirm_mail(token):
             
             session['userId'] = user.userId
             session['username'] = user.firstName
-
-            if not role.objects(userId=user.userId).first():
-                arole = role(userId=user.userId)            
-                arole.save()
 
             r = role.objects(userId=user.userId).first()
             session['role'] = r.rname
@@ -365,58 +371,106 @@ def fsa():
 
 #############################
 # upload the rubics excel file to the database
-@app.route('/uploader', methods=['GET','POST'])
+@app.route('/uploader', methods=['GET','POST']) # rubics  Uploader 
 def uploader():
     if request.method =='POST':
+        if (session['role'] == 'admin'):
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                flash('No file part',"danger")
+                return redirect(url_for('admindash'))
 
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part',"danger")
+            f=request.files['file']
+            print(f.filename)
+            # if user does not select file , browser also submit an empty part filename
+            if f.filename =='':
+                flash('No selected File',"danger")
+                return redirect(url_for('admindash'))
+
+            if f.filename != 'rubicsMetrix.xlsx':
+                flash('please upload the correct rubix file',"danger")
+                return redirect(url_for('admindash'))
+
+            sf = secure_filename(f.filename)
+            #print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'],sf))
+            flash("uploaded file successfully","success")
+            try:
+                rubics.uploadnew()        # update the rubics data in the database
+                flash("successfully saved the rubics cube details to the database", "success")
+            except:
+                flash("can't update save the rubics cube details to the database","danger")
+
             return redirect(url_for('admindash'))
-
-        f=request.files['file']
-        print(f.filename)
-        # if user does not select file , browser also submit an empty part filename
-        if f.filename =='':
-            flash('No selected File',"danger")
-            return redirect(url_for('admindash'))
-
-        if f.filename != 'rubicsMetrix.xlsx':
-            flash('please upload the correct rubix file',"danger")
-            return redirect(url_for('admindash'))
-
-        sf = secure_filename(f.filename)
-        print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
-        f.save(os.path.join(app.config['UPLOAD_FOLDER'],sf))
-        flash("uploaded file successfully","success")
-        try:
-            rubics.uploadnew()        # update the rubics data in the database
-            flash("successfully saved the rubics cube details to the database", "success")
-        except:
-            flash("can't update save the rubics cube details to the database","danger")
-
-        return redirect(url_for('admindash'))
+        else:
+            flash("You don't have admin privledges to upload")
 
 
-@app.route('/pupload', methods=['GET', 'POST'])
+@app.route('/pupload', methods=['GET', 'POST']) # project uploader 
 def pupload():
     if request.method == 'POST':
+       
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part', "danger")
+            return redirect(url_for('admindash'))
 
         f = request.files['file']
         print(f.filename)
-
+            # if user does not select file , browser also submit an empty part filename
         if f.filename == '':
-            flash('No selected File', "danger")
+            flash('No Project File selected for upload', "danger")
+            return redirect(url_for('admindash'))
+
+        if f.filename != 'projectDetails.xlsx':
+            flash('please upload the correct project details file with the same name and format', "danger")
             return redirect(url_for('admindash'))
 
         sf = secure_filename(f.filename)
+        #print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], sf))
         
-        #f.save(os.path.join(app.config['UPLOAD_FOLDER'],sf))
-        projects.pupload()
-        flash("uploaded Project details file successfully", "success")
-        #rubics.uploadnew()        # update the rubics data in the database
+        try:
+            projects.pupload()       # update the project data in the database fucntion in models
+            flash("successfully saved the Project details to the database", "success")
+        except:
+            flash("can't update save the Project details to the database","danger")
 
         return redirect(url_for('admindash'))
+
+
+@app.route('/uupload', methods=['GET', 'POST'])  # project uploader
+def uupload():
+    if request.method == 'POST':
+
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part', "danger")
+            return redirect(url_for('admindash'))
+
+        f = request.files['file']
+        
+        # if user does not select file , browser also submit an empty part filename
+        if f.filename == '':
+            flash('No User File selected to upload', "danger")
+            return redirect(url_for('admindash'))
+
+        if f.filename != 'userDetails.xlsx':
+            flash('please upload the correct user details file with the same name and format', "danger")
+            return redirect(url_for('admindash'))
+        print(f.filename)
+        sf = secure_filename(f.filename)
+        #print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], sf))
+
+        try:
+            User.userUpload()      # update the User data in the database fucntion in models
+            flash("successfully saved the User details to the database", "success")
+        except:
+            flash("can't update  the User details to the database", "danger")
+
+        return redirect(url_for('admindash'))
+
 
 ######################################
 # viewing the user database
@@ -627,7 +681,7 @@ def emailself():
     return redirect(url_for('admindash'))
 
 
-####### eval 
+########### eval 
 
 @app.route('/eval',methods=['GET','POST'])
 def eval():

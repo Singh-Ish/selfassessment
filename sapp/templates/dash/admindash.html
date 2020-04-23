@@ -29,7 +29,8 @@
 
     {% include 'status/asstatus.html' %}
 
-    
+    <br>
+    <br>
     <p>To export or download the results</p>
     
     <div class="row">  
@@ -81,7 +82,7 @@ click her <a href="">Preview </a>  to view the uploaded project details
   <p><b>User Details </b></p>
   <p>Upload the latest file containig the student details, who should have access to this portal</p>
   <br>
-  <form class="fupload" action="" method="POST" enctype="multipart/form-data">
+  <form class="fupload" action="/uupload" method="POST" enctype="multipart/form-data">
     <input type="file" name="file">
     <input type="submit" value=Upload />
   </form>
