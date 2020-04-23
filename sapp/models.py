@@ -1,22 +1,65 @@
 import flask
 from sapp import db 
-from werkzeug.security import generate_password_hash, check_password_hash
+#from werkzeug.security import generate_password_hash, check_password_hash
 from sapp import admin
 import pandas as pd
 import os
+from flask import flash
 
 # database  schema  are described here
 class User(db.Document):
     # user authentication information 
     userId = db.IntField(unique=True) # same as student id
     email = db.StringField( max_length=30, unique=True)
+    firstName = db.StringField(max_length=50)
+    lastName = db.StringField(max_length=50)
+    
+    def userUpload():
+        # check if the role is student or admin 
+        print("hello from the user upload function ")
+
+        ro = role.Objects()
+        
+        # resetting the access for students 
+        
+        for r in ro:
+            if (r.rname == 'student'):
+                data = User.objects(userId=r.userId)
+                r.delete()
+                data.delete()
+        
+        # adding the user details to the database 
+        ur = pd.read_excel('sapp/static/docs/userDetails.xlsx')
+        ur.reset_index(inplace=False)
+        usr = ur.to_dict("records")
+        print(usr)
+
+        
+        for u in usr:
+            userId = u['userId']
+            firstName = u['firstName']
+            lastName = u['lastName']
+            email = u['email']
+
+            s = User(userId=userId,firstName=firstName,lastName=lastName,email=email)
+            s.save()
+
+            ro = role(userId=userId)
+            ro.save()
+
+            print("uploaded the new user  to the database")
+        
+    
+        
+    
+    '''
     password = db.StringField()
 
     # user information 
     firstName = db.StringField( max_length=50)
     lastName = db.StringField( max_length=50)
 
-    #roles = db.relationship('Role',secondary='user_roles', backref = db.backref('users,lazy='dynamic'))
+    roles = db.relationship('Role',secondary='user_roles', backref = db.backref('users,lazy='dynamic'))
 
     def set_password(self,password):
         self.password = generate_password_hash(password)
@@ -24,10 +67,7 @@ class User(db.Document):
     def get_password(self,password):
         return check_password_hash(self.password, password)
 
-class Role(db.Document):
-    #id=db.Integer(unique=True)
-    name = db.StringField(max_length=50)
-
+    '''
 
 
 class rubics(db.Document):
@@ -69,41 +109,42 @@ class projects(db.Document):
     assessmentStatus = db.IntField()
 
     def pupload():
-        try: 
-
-            pf = pd.read_excel('sapp/static/docs/projectDetails.xlsx')
-            pf = pf.fillna(method='ffill')
-            pf.groupNo = pf.groupNo.astype(int)
-            pf.userId = pf.userId.astype(int)
-            pf.assessmentStatus = pf.assessmentStatus.astype(int)
-            pf.coSupervisor = pf.coSupervisor.astype(object)
-            print(pf.dtypes)
-            # removing the duplication enteries and creating a new dataframe df
-            pf = pf.drop_duplicates()
         
-            print(pf.columns)
-            pf.reset_index(inplace=False)
-            pf = pf.to_dict("records")
-            print(pf)
+        #deleting all the previous data
+        data = projects.objects()
+        data.delete()
 
-            for p in pf:
-                groupNo = p['groupNo']
-                title = p['title']
-                supervisor = p['supervisor']
-                coSupervisor = p['coSupervisor']
-                userId = p['userId']
-                lastName = p['lastName']
-                firstName = p['firstName']
-                assessmentStatus = p['assessmentStatus']
-                try:
-                    s = projects(groupNo=groupNo, title=title, supervisor=supervisor, userId=userId,
+        # reading the file from the uploaded location 
+        pf = pd.read_excel('sapp/static/docs/projectDetails.xlsx')
+        pf = pf.fillna(method='ffill')
+        pf.groupNo = pf.groupNo.astype(int)
+        pf.userId = pf.userId.astype(int)
+        pf.assessmentStatus = pf.assessmentStatus.astype(int)
+        pf.coSupervisor = pf.coSupervisor.astype(object)
+        print(pf.dtypes)
+        # removing the duplication enteries and creating a new dataframe df
+        pf = pf.drop_duplicates()
+        
+        print(pf.columns)
+        pf.reset_index(inplace=False)
+        pf = pf.to_dict("records")
+        print(pf)
+
+        for p in pf:
+            groupNo = p['groupNo']
+            title = p['title']
+            supervisor = p['supervisor']
+            coSupervisor = p['coSupervisor']
+            userId = p['userId']
+            lastName = p['lastName']
+            firstName = p['firstName']
+            assessmentStatus = p['assessmentStatus']
+            
+            s = projects(groupNo=groupNo, title=title, supervisor=supervisor, coSupervisor=coSupervisor, userId=userId,
                              lastName=lastName, firstName=firstName, assessmentStatus=assessmentStatus)
-                    s.save()
-                    print("uploaded the new projects data to the database")
-                except:
-                    print("can't save the project dat to the database")
-        except:
-            print(" can't read the project data file ")
+            s.save()
+            print("uploaded the new projects data to the database")
+        
 
 
 ######## sa Matrix
