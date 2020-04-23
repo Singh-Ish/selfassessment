@@ -122,20 +122,20 @@ class projects(db.Document):
         pf.userId = pf.userId.astype(int)
         pf.assessmentStatus = pf.assessmentStatus.astype(int)
         pf.coSupervisor = pf.coSupervisor.astype(object)
-        print(pf.dtypes)
+        #print(pf.dtypes)
         # removing the duplication enteries and creating a new dataframe df
         pf = pf.drop_duplicates()
         
-        print(pf.columns)
+        #print(pf.columns)
         pf.reset_index(inplace=False)
         pf = pf.to_dict("records")
-        print(pf)
+        #print(pf)
 
         for p in pf:
             groupNo = p['groupNo']
             title = p['title']
             supervisor = p['supervisor']
-            coSupervisor = p['coSupervisor']
+            coSupervisor = str(p['coSupervisor'])
             userId = p['userId']
             lastName = p['lastName']
             firstName = p['firstName']

@@ -430,12 +430,13 @@ def pupload():
         #print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], sf))
         
+        
         try:
             projects.pupload()       # update the project data in the database fucntion in models
             flash("successfully saved the Project details to the database", "success")
         except:
             flash("can't update save the Project details to the database","danger")
-
+        
         return redirect(url_for('admindash'))
 
 
@@ -622,9 +623,7 @@ def sendmail():
     subject = request.form["subject"]
     temail = emailtemplate.objects().first()
 
-    #subject = 'Mail from flask server'
-    #msg = "testing the body message form flask mail "
-    #recipients = 'ishdeep.711@gmail.com'
+    
     sender = temail.sender
     msg = Message(subject=subject, body=body,
                   sender=sender, recipients=recipients)
@@ -738,5 +737,3 @@ def download():
     except:
         flash("can't doenload the file please contact the developer","danger")
         return redirect(url_for('admindash'))
-   
- 
