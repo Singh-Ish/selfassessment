@@ -22,6 +22,7 @@ class Config(object):
     MAIL_PORT = 465
     MAIL_USE_SSL = True
     MAIL_USE_TLS = False
-    #MAIL_ASCII_ATTACHMENTS = True
+    MAIL_ASCII_ATTACHMENTS = False
     MAIL_USERNAME = 'ishdeepsingh@sce.carleton.ca'
     MAIL_PASSWORD = 'Change.711'
+    MAIL_DEFAULT_SENDER = 'ishdeepsingh@sce.carleton.ca'

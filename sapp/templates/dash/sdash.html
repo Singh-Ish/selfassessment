@@ -19,7 +19,9 @@
     <p><b>Project Title:</b> {{sdata.title}}</p>
     <p><b>Group Number:</b> {{sdata.groupNo}}</p>
     <p><b>Supervisor:</b> {{sdata["supervisor"]}}</p>
+    {% if (sdata.coSupervisor!='NA') %}
     <p> <b>co-supervisor:</b> {{sdata.coSupervisor}}</p>
+    {% endif %}
       </div>
       <br>
     <p class="note">
@@ -29,18 +31,20 @@
    
 
     <!-- the status of the other grou members who have submited the assessment  -->
-    <p>Kindly confirm the group members you will submitting the self assessment for </p>
+    <p>Kindly check the group members of your group  </p>
     {% include 'status/sstatus.html' %}
     
+    <p class="note"> <small> <i><strong> Note</strong> If there are any changes kindly contact your administrator </p>
     <br>
-    <button class="btn btn-primary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Confirm and Submit Assessment</button>
-<!--
+    
+    <button class="btn btn-primary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Continue </button>
+    <!--
     {% if(sdata.assessmentStatus == 0) %}
-    <button  class="btn btn-primary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Confirm and Submit Assessment</button>
+    <button  class="btn btn-primary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Continue </button>
     {% else %}
-    <button class="btn btn-secondary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button" disabled> Confirm and Submit Assessment</button>
+    <button class="btn btn-secondary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button" disabled> Continue</button>
     {% endif %}
-  -->
+    -->
     <br><br>
 
 

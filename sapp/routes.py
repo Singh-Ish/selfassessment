@@ -576,7 +576,7 @@ def sendmail():
         msg.attach("image.png", "image/png", fp.read())
     '''
     
-    flash("Mail has been Sent to ", "success")
+    flash(f"Mail has been Sent to {recipients}", "success")
     return redirect(url_for('admindash'))
 
 
@@ -604,29 +604,25 @@ def emailself():
     id = session.get('userId')
 
     cuser = User.objects(userId=id).first()
-    recipients = cuser.email 
+    recipients = [cuser.email]
+    #recipients = ['ishdeep.711@gmail.com']
     print(recipients)
-    sender = 'ishdeepsingh@sce.carleton.ca'
-    message = " Please find attached the result excel sheet "
+    body = " Hi  \n Please find attached the Self assessment results, excel sheet. \n Regards  "
     subject = " Self assesment results"
     
-    try:
-        #with app.open_resource("assessmentresult.xlsx") as fp:
-        msg.attach("assessmentresult.xlsx","/", fp.read())
-        
-        flash("successfully added the file","success")
-    except:
-        flash("can't add the file", "danger")
+    msg = Message(subject=subject, body=body, recipients=recipients)
 
+
+    with app.open_resource("assessmentresult.xlsx") as fp:
+        msg.attach("assessmentresult.xlsx", "application/xlsx", fp.read())
+    
+    
     try:
-        msg = Message(subject=subject, body=body,
-                      sender=sender, recipients=recipients)
-                    
-        #msg.send()
-        flash("The Email has been sent and the result has been send as an attachement ", "success")
+        mail.send(msg)
+        flash(f"The Email has been sent and the result has been send as an attachement to {cuser.email} ", "success")
     except:
         flash("Can't send mail, contact your administrator ", "danger")
-    
+
     
     return redirect(url_for('admindash'))
 
@@ -636,7 +632,7 @@ def emailself():
 @app.route('/eval',methods=['GET','POST'])
 def eval():
     # doing the export the result first 
-    print("hello from eval function ")
+    
     pro = projects.objects.all() # reading all the projects 
     ru = rubics.objects.all()
 
@@ -653,7 +649,7 @@ def eval():
             vavg = df[['value']].mean()
             vavg = round(vavg, 2)
 
-            rinl = dict([(r.Indicator, float(vavg))])
+            rinl = dict([(r.Indicator, int(vavg))])
             
             rin.update(rinl)
      

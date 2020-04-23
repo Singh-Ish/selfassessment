@@ -22,7 +22,7 @@
 
     <p>For sending email reminders to all students who hasn't filled the assessment
       <form action="{{ url_for ('emailall') }}">
-        <button type="submit"> Send Reminder to All </button>
+        <button class="btn btn-outline-primary" type="submit"> Send Reminder to All </button>
       </form>
     </p>
     <br>
@@ -31,17 +31,22 @@
 
     
     <p>To export or download the results</p>
+    
+    <div class="row">  
+      <div clas="col">
     <form action="{{url_for('eval')}}" method="POST">
-      <button type="submit" name="button"> <span class="glyphicon glyphicon-save"></span>
+      <button class="btn btn-outline-dark" type="submit" name="button"> <span class="glyphicon glyphicon-save"></span>
         Export result to excel</button>
     </form>
+    </div>
     
-    <br>
+    <div class="col">
     <form action="{{url_for('emailself')}}" method="POST">
-      <button type="submit" name="button">Mail the result to Myself</button>
+      <button  class="btn btn-outline-dark" type="submit" name="button">Mail the result to Myself</button>
 
     </form>
-    
+    </div>
+    </div>
 
   </div>
 

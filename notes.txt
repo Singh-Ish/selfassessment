@@ -6,9 +6,9 @@ during login email id is case sensitive
 things to do 
 1. automatic email once all the group members fill the form 
  
-3. fucntionality email to myself 
+3. fucntionality email to myself almost done : just move the file to the sapp folder 
 4. test bugs and access authorization
-5. give admin rights to reset the password for a user
+
 6. restful api for admin to make necessary changes
 7. table data sorting by clicking on the headers  
 8. learn how to create sessions an dsave value just for that user
