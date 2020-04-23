@@ -104,7 +104,7 @@ def login():
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
     
-    if not User.objects().first():
+    if not role.objects(rname="admin").first():
         u = User(userId=1,firstName="Ish",lastName="singh",email="ishdeepsingh@sce.carleton.ca")
         u.save() 
         ro = role(userId=1,rname="admin")
@@ -463,12 +463,13 @@ def uupload():
         #print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], sf))
 
+        
         try:
             User.userUpload()      # update the User data in the database fucntion in models
             flash("successfully saved the User details to the database", "success")
         except:
             flash("can't update  the User details to the database", "danger")
-
+        
         return redirect(url_for('admindash'))
 
 
@@ -600,11 +601,14 @@ def emailall():
     stu = projects.objects(assessmentStatus=0)
     temail = emailtemplate.objects().first()
     for s in stu:
-        reciever = s.userId # use the aggreatatory function to get the email 
+        recipients = s.email  # use the aggreatatory function to get the email
         subject = temail.subject
-        message = "Dear " + s.firstName +',' + '\n'+ temail.message
+        body = "Dear " + s.firstName +',' + '\n'+ temail.message
+        sender = temail.sender
         #print(reciever)
         #print(message)
+        msg = Message(sender=sender, subject=subject, body=body, recipients=recipients)
+        mail.send(msg)
     # write code to check for the assessment for all the user and then send them the mail 
     flash("Mail has been Sent to all the students", "success")
     return redirect(url_for('admindash'))
@@ -616,16 +620,18 @@ def sendmail():
     recipients = list(recipients.split(","))
     body = request.form["message"]
     subject = request.form["subject"]
+    temail = emailtemplate.objects().first()
 
     #subject = 'Mail from flask server'
     #msg = "testing the body message form flask mail "
     #recipients = 'ishdeep.711@gmail.com'
-    sender = 'ishdeepsingh@sce.carleton.ca'
+    sender = temail.sender
     msg = Message(subject=subject, body=body,
                   sender=sender, recipients=recipients)
     mail.send(msg)
     print("Mail has been sent  ")
-    ''' adding attachment
+    ''' 
+    #adding attachment
     with app.open_resource("image.png") as fp:
         msg.attach("image.png", "image/png", fp.read())
     '''

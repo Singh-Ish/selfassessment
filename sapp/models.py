@@ -10,24 +10,27 @@ from flask import flash
 class User(db.Document):
     # user authentication information 
     userId = db.IntField(unique=True) # same as student id
-    email = db.StringField( max_length=30, unique=True)
+    email = db.StringField( max_length=50, unique=True)
     firstName = db.StringField(max_length=50)
     lastName = db.StringField(max_length=50)
     
     def userUpload():
         # check if the role is student or admin 
         print("hello from the user upload function ")
+        
+        ro = role.objects()
         #data = User.objects()
-        #ro = role.Objects()
         
         # resetting the access for students 
-        '''
+        
+    
         for r in ro:
             if (r.rname == 'student'):
                 data = User.objects(userId=r.userId)
                 r.delete()
                 data.delete()
-        '''
+        
+        print("reading the excel file ")
         # adding the user details to the database 
         ur = pd.read_excel('sapp/static/docs/userDetails.xlsx')
         ur.reset_index(inplace=False)
@@ -46,11 +49,9 @@ class User(db.Document):
 
             ro = role(userId=userId)
             ro.save()
+            #print("uploaded the new user {} to the database".format(userId))
 
-            print("uploaded the new user  to the database")
-        
-    
-        
+        print("added the users to the database")    
     
     '''
     password = db.StringField()
@@ -140,7 +141,7 @@ class projects(db.Document):
             firstName = p['firstName']
             assessmentStatus = p['assessmentStatus']
             
-            s = projects(groupNo=groupNo, title=title, supervisor=supervisor, userId=userId,
+            s = projects(groupNo=groupNo, title=title, supervisor=supervisor, coSupervisor=coSupervisor, userId=userId,
                              lastName=lastName, firstName=firstName, assessmentStatus=assessmentStatus)
             s.save()
             print("uploaded the new projects data to the database")

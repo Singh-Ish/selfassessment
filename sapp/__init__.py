@@ -9,13 +9,15 @@ from itsdangerous import URLSafeTimedSerializer
 
 
 
-# running the application 
-if __name__ == "__main__":
-    app.run()
+
 
 
 app=Flask(__name__)
 
+# running the application
+if __name__ == "__main__":
+    app.run()
+    
 app.config.from_object(Config)
 
 # admin setting
