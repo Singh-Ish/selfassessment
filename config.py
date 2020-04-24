@@ -13,7 +13,7 @@ class Config(object):
     FLASK_ADMIN_SWATCH = 'cerlean'
 
     #changing the server name 
-    SERVER_NAME='saportal.sce.carleton.ca'
+    #SERVER_NAME='saportal.sce.carleton.ca'
 
     # file upload settings
     UPLOAD_FOLDER = 'sapp/static/docs'
