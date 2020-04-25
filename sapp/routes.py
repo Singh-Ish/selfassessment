@@ -97,13 +97,13 @@ def login():
         msg = Message('confirm Email token login',sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
 
         # link to the token 
-        link = url_for('confirm_mail', token=token)
+        link = url_for('confirm_mail', token=token, _external=True)
         print(link)
         externallink = ('http://saportal.sce.carleton.ca' + link)
-        print(externallink)
+        #print(externallink)
         
         msg.body = ' \n Hi your login link is \n \n {}'.format(externallink)
-        mail.send(msg)
+        #mail.send(msg)
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
     
@@ -467,6 +467,7 @@ def uupload():
         #print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], sf))
 
+        #User.userUpload()
         
         try:
             User.userUpload()      # update the User data in the database fucntion in models
@@ -474,6 +475,43 @@ def uupload():
         except:
             flash("can't update  the User details to the database", "danger")
         
+        return redirect(url_for('admindash'))
+
+
+@app.route('/fdupload', methods=['GET', 'POST'])  # project uploader
+def fdupload():
+    if request.method == 'POST':
+
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part', "danger")
+            return redirect(url_for('admindash'))
+
+        f = request.files['file']
+
+        # if user does not select file , browser also submit an empty part filename
+        if f.filename == '':
+            flash('No faculty File selected to upload', "danger")
+            return redirect(url_for('admindash'))
+
+        if f.filename != 'facultyDetails.xlsx':
+            flash(
+                'please upload the correct faculty details file with the same name and format', "danger")
+            return redirect(url_for('admindash'))
+        print(f.filename)
+        sf = secure_filename(f.filename)
+        #print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], sf))
+
+        #faculty.newf()
+        try:
+            faculty.newf()      # update the User data in the database fucntion in models
+            flash("successfully saved the User details to the database", "success")
+        except:
+            flash("can't update  the faculty details to the database", "danger")
+        
+        
+
         return redirect(url_for('admindash'))
 
 
@@ -674,8 +712,10 @@ def emailself():
     
     msg = Message(subject=subject, body=body, recipients=recipients)
 
+    filename = "assessmentresult.xlsx"
+    filepath=os.path.join(os.getcwd(), filename)
 
-    with app.open_resource("assessmentresult.xlsx") as fp:
+    with app.open_resource(filepath) as fp:
         msg.attach("assessmentresult.xlsx", "application/xlsx", fp.read())
     
     
@@ -709,7 +749,7 @@ def eval():
             df = pd.DataFrame(res)
             
             vavg = df[['value']].mean()
-            vavg = round(vavg, 2)
+            vavg = int(vavg)
 
             rinl = dict([(r.Indicator, int(vavg))])
             
@@ -738,5 +778,5 @@ def download():
         return send_file(os.path.join(os.getcwd(), filename), as_attachment=True)
 
     except:
-        flash("can't doenload the file please contact the developer","danger")
+        flash("can't downlaod the file please contact the developer","danger")
         return redirect(url_for('admindash'))

@@ -37,13 +37,16 @@ class User(db.Document):
         usr = ur.to_dict("records")
         print(usr)
 
-        
+        #flash("can't read the file headers", "danger")
+
         for u in usr:
+            
             userId = u['userId']
             firstName = u['firstName']
             lastName = u['lastName']
             email = u['email']
-
+            
+                
             s = User(userId=userId,firstName=firstName,lastName=lastName,email=email)
             s.save()
 
@@ -179,22 +182,23 @@ class faculty(db.Document):
 
     def newf():
         #deleting all the previous data
-        #data = faculty.objects()
-        #data.delete()
+        data = faculty.objects()
+        data.delete()
         #db.DeleteMany({})
-        ru = pd.read_excel('sapp/static/docs/SCEfaculty.xlsx')
-        ru.reset_index(inplace=False)
-        rub = ru.to_dict("records")
+        fu = pd.read_excel('sapp/static/docs/facultyDetails.xlsx')
+        fu.reset_index(inplace=False)
+        fa = fu.to_dict("records")
 
-        print(rub)
+        print(fa)
         
-        for r in rub:
+        
+        for r in fa:
             lastName = r['lastName']
             firstName = r['firstName']
             email = r['email']
             s = faculty(lastName=lastName,firstName=firstName,email=email)
             s.save()
-            print("uploaded the new faculty data to the database")
+            #print("uploaded the new faculty data to the database")
         
 
 #######role based authentication 
