@@ -14,7 +14,7 @@
 
   <div class="satab">
     <h2>Student assesment Status</h2>
-
+    <br>
     {% include 'other/emailtemp.html'%}
 
     <br>
@@ -27,11 +27,12 @@
     <br>
 
     {% include 'status/asstatus.html' %}
-
+    <hr class="featurette-divider">
     <br>
     <br>
-    <p>To export or download the results</p>
-    
+    <h3>To download or Export the results</h3>
+    <br>
+    <div class="container">
     <div class="row">  
       <div clas="col">
     <form action="{{url_for('download')}}" method="POST">
@@ -47,69 +48,84 @@
     </form>
     </div>
     </div>
+    </div>
 
   </div>
 
 
   <br><br>
 
-<h3>checkout the data in the databse </h3>
+  <hr class="featurette-divider">
+
+  <div class="jumbotron">
+<h3>Checkout the data in the database </h3>
 <br>
 
 {% include 'other/adbdata.html' %}
 
+</div>
+<hr class="featurette-divider">
+
 
 <!-- project uploader  -->
 <br><br>
+
 <h2>Uploaders </h2>
 <br>
-<div class= "sarules project">
-  <p><b>Project Details </b></p>
-  <p>Upload the latest file containig the project details, student details and their group assignment here </p>
-  <br>
-  <form class="fupload" action="/pupload" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" value=Upload />
-  </form>
-  <br>
-click her <a href="">Preview </a>  to view the uploaded project details 
 
-</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <!-- project data uploader -->
+      <p><b>Project Details </b></p>
+      <p>Upload the latest file containig the project details, student details and their group assignment here </p>
+      <br>
+      <form class="fupload" action="/pupload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file"> <br><br>
+        <input type="submit" value=Upload />
+      </form>
+      <br>
+      click her <a href="/project">Preview </a> to view the uploaded project details
+    </div>
+    <div class="col-sm">
+      <!-- user data uploader -->
+    <p><b>Faculty Details </b></p>
+    <p>Upload the latest file containig the faculty details, who should have access to this portal</p>
+    <br>
+    <form class="fupload" action="/fdupload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file"> <br><br>
+      <input type="submit" value=Upload />
+    </form>
+    <br>
+    click her <a href="/facultymembers">Preview </a> to view the Faculty details
 
-<br><br>
-<!-- User data uploader -->
-<div class="sarules project">
-  <p><b>User Details </b></p>
-  <p>Upload the latest file containig the student details, who should have access to this portal</p>
-  <br>
-  <form class="fupload" action="/uupload" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" value=Upload />
-  </form>
-  <br>
-  click her <a href="">Preview </a> to view the student details 
-</div>
+    </div>
+  </div>
+  <br><br>
+  <div class="row">
+    <div class="col-sm">
+      <!-- faculty uploader-->
+      <p><b>Faculty Details </b></p>
+      <p>Upload the latest file containig the faculty details, who should have access to this portal</p>
+      <br>
+      <form class="fupload" action="/fdupload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file"> <br><br>
+        <input  type="submit" value=Upload />
+      </form>
+      <br>
+      click her <a href="/facultymembers">Preview </a> to view the Faculty details
 
-<br><br>
-
-<!-- Faculty  data uploader -->
-<div class="sarules project">
-  <p><b>Faculty  Details </b></p>
-  <p>Upload the latest file containig the faculty details, who should have access to this portal</p>
-  <br>
-  <form class="fupload" action="/fdupload" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" value=Upload />
-  </form>
-  <br>
-  click her <a href="">Preview </a> to view the Faculty details
-</div>
-
+    </div>
+    <div class="col-sm"></div>
+    </div>
+  </div>
+ 
 <br><br>
 
 <!-- rubic cube uploader -->
-<div class="sarules">
+<div class="container">
   <p><b>category Rubics </b></p>  
+  <p>Upload the latest rubics cube file </p>
   <br>
   <form class="fupload" action="/uploader" method="POST" enctype="multipart/form-data">
     <input type="file" name="file">
@@ -121,13 +137,13 @@ click her <a href="">Preview </a>  to view the uploaded project details
     <div class="card">
       <div class="card-header" id="headingThree">
         <h2 class="mb-0">
-          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#categoryrubics"
             aria-expanded="false" aria-controls="collapseThree">
             Category Rubics Rules
           </button>
         </h2>
       </div>
-      <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div id="categoryrubics" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
         <div class="card-body">
           <p>{% include 'other/rubics.html'%}</p>
         </div>
@@ -136,4 +152,8 @@ click her <a href="">Preview </a>  to view the uploaded project details
   </div>
 
   </div>
+
+  <br><br>
+  
+
 {% endblock %}

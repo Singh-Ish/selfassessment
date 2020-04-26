@@ -7,9 +7,9 @@
 </div>
 
 <div class="satab">
-  <p>Current stauts of the groups and their assessement completion progress</p>
+  <p>Current status of your groups and their assessement completion progress</p>
   {% include 'status/fsstatus.html' %}
-  <form action="{{url_for('eval')}}" method="POST">
+  <form action="{{url_for('download')}}" method="POST">
     <button type="submit" name="button">Export result to excel</button>
   </form>
 

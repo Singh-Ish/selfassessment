@@ -1,4 +1,4 @@
-<header>
+<!--<header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       {% if not session['username'] %}
       <a class="navbar-brand" href="{{ url_for('home') }}"><img src="{{ url_for('static',filename='images/logo.png')}}" class="logo" alt=""> </a>
@@ -29,9 +29,9 @@
 
           {% endif %}
           {% endif %}
+          </div>
           
-          <ul class="nav navbar-nav navbar-right">
-
+          <div class="">
 
           {% if not session['username'] %}
           
@@ -41,8 +41,63 @@
           <a class="nav-item nav-link  {% if login %}active {% endif %}" href="{{ url_for('logout') }}">Logout</a>
           {% endif %}
 
-          </ul>
-        </div>
+        
+          </div>
+          
+        
       </div>
     </nav>
+</header>
+-->
+
+<header>
+
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <div class="my-0 mr-md-auto">
+  <!-- logo and on click events -->
+  {% if not session['username'] %}
+  <a class="navbar-brand" href="{{ url_for('home') }}"><img src="{{ url_for('static',filename='images/logo.png')}}"
+      class="logo" alt=""> </a>
+  {% else %}
+  
+  {% if session['role']=='student' %}
+  <a class="navbar-brand" href="{{ url_for('sdash') }}"><img src="{{ url_for('static',filename='images/logo.png')}}"
+      class="logo" alt=""> </a>
+  {% else %}
+  <a class="navbar-brand" href="{{ url_for('admindash') }}"><img src="{{ url_for('static',filename='images/logo.png')}}"
+      class="logo" alt=""> </a>
+  {% endif %}
+  {% endif %}
+
+  </div>
+  <!-- logo ending -->
+  <div>
+  <nav class="my-2 my-md-0 mr-md-3">
+
+    <a class="p-2 text-dark" href="{{ url_for('home') }}">Home </a>
+    
+    {% if session['username'] %}
+    {% if session['role']=='student' %}
+    <a class="p-2 text-dark" href="{{ url_for('sdash') }}">Student Dashboard</a>
+    {% else %}
+    
+    <a class="p-2 text-dark" href="{{ url_for('fdash') }}">Faculty Dashboard</a>
+    <a class="p-2 text-dark" href="{{ url_for('admindash') }}">Admin</a>
+    
+    {% endif %}
+    {% endif %}
+    </div>
+  </nav>
+  <div>
+  {% if not session['username'] %}
+  
+  <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
+  
+  {%else %}
+  <a class="btn btn-outline-primary" href="{{ url_for('logout') }}">Logout</a>
+  {% endif %}
+  </div>
+  </div>
+</div>
+
 </header>

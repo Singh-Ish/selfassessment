@@ -2,15 +2,15 @@
 
 <div class="accordion" id="accordionExample">
     <div class="card">
-        <div class="card-header" id="headingThree">
+        <div class="card-header" id="headingone">
             <h2 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
-                    aria-expanded="false" aria-controls="collapseThree">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#emailtemp"
+                    aria-expanded="false" aria-controls="emailtemp">
                     Email Default Template
                 </button>
             </h2>
         </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+        <div id="emailtemp" class="collapse" aria-labelledby="headingone" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="container">
                     <form action="{{ url_for('emailtemp') }}" method="POST">
@@ -37,6 +37,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 
