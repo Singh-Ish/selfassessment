@@ -14,7 +14,6 @@
 
   <div class="satab">
     <h2>Student assesment Status</h2>
-    <p>{self assessment table for submitting for the group members}</p>
 
     {% include 'other/emailtemp.html'%}
 
@@ -35,15 +34,15 @@
     
     <div class="row">  
       <div clas="col">
-    <form action="{{url_for('eval')}}" method="POST">
-      <button class="btn btn-outline-dark" type="submit" name="button"> <span class="glyphicon glyphicon-save"></span>
+    <form action="{{url_for('download')}}" method="POST">
+      <button class="btn btn-primary" type="submit" name="button"> <span class="glyphicon glyphicon-save"></span>
         Export result to excel</button>
     </form>
     </div>
     
     <div class="col">
     <form action="{{url_for('emailself')}}" method="POST">
-      <button  class="btn btn-outline-dark" type="submit" name="button">Mail the result to Myself</button>
+      <button  class="btn btn-primary" type="submit" name="button">Mail the result to Myself</button>
 
     </form>
     </div>
@@ -54,7 +53,8 @@
 
   <br><br>
 
-<h3>checkout the data from the databse </h3>
+<h3>checkout the data in the databse </h3>
+<br>
 
 {% include 'other/adbdata.html' %}
 

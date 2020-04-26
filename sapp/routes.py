@@ -1,4 +1,4 @@
-from sapp import app,db,mail,s
+from sapp import app,db,mail,s,urldns
 from flask import render_template, request,json,Response, redirect , url_for , session, jsonify, send_file,send_from_directory, url_for
 from sapp.models import User, rubics, projects, samatrix, emailtemplate, feedback, faculty, role
 from sapp.forms import LoginForm, RegisterForm 
@@ -99,7 +99,7 @@ def login():
         # link to the token 
         link = url_for('confirm_mail', token=token, _external=True)
         print(link)
-        externallink = ('http://saportal.sce.carleton.ca' + link)
+        externallink = (urldns + link)
         #print(externallink)
         
         msg.body = ' \n Hi your login link is \n \n {}'.format(externallink)
@@ -345,10 +345,9 @@ def fsa():
     userId= session.get('userId') 
     su = projects.objects(userId=userId).first()
     if (su.assessmentStatus==0):
-        print(" the assessment status is")
-        print(su.assessmentStatus)
         su.assessmentStatus=1
         su.save()
+    
     
 
     # need to save the response form the feedback
@@ -368,6 +367,13 @@ def fsa():
             print("comment has been saved to the database")
         
         flash("response have been saved!", "success")
+        
+        try:
+            samatrix.eval()
+            print("evaluated the assessment and saved in the file ")
+        except:
+            print("can't evaulate the matrix ")
+
         return redirect(url_for('sdash'))
     return render_template("other/fsa.html")
 
@@ -629,8 +635,7 @@ def arole():
 @app.route('/emailone', methods=['GET', 'POST'])
 def emailone():
     id = request.form["userId"]
-    print("id clicked is ",id)
-    #print(id)
+    print("Clicked  userId is ",id)
     s = User.objects(userId=id).first()
     print(s.email)
     temail = emailtemplate.objects().first()
@@ -640,15 +645,36 @@ def emailone():
 @app.route('/emailall', methods=['GET', 'POST'])
 def emailall():
 
-    stu = projects.objects(assessmentStatus=0)
+    stu = list(projects.objects(assessmentStatus=0).aggregate(*[
+        {
+            '$lookup': {
+                'from': 'user',
+                'localField': 'userId',
+                'foreignField': 'userId',
+                'as': 'userdata'
+            }
+        }, {
+            '$unwind': {
+                'path': '$userdata'
+            }
+        }
+    ]))
+
+    
+
+
     temail = emailtemplate.objects().first()
     for s in stu:
-        recipients = s.email  # use the aggreatatory function to get the email
+        s = dict(s)
+        
+        recipients = s['userdata']['email']
+        # use the aggreatatory function to get the email
+        recipients = list(recipients.split(","))
         subject = temail.subject
-        body = "Dear " + s.firstName +',' + '\n'+ temail.message
+        link = url_for('home')
+        link = urldns + link
+        body = ("Dear " + s['firstName'] +',' + '\n'+ temail.message +'\n \n' + "Access the self assessment portal {}".format(link))
         sender = temail.sender
-        #print(reciever)
-        #print(message)
         msg = Message(sender=sender, subject=subject, body=body, recipients=recipients)
         mail.send(msg)
     # write code to check for the assessment for all the user and then send them the mail 
@@ -658,9 +684,12 @@ def emailall():
 
 @app.route('/sendmail', methods=['GET','POST'])
 def sendmail():  
-    recipients = request.form["reciever"]
-    recipients = list(recipients.split(","))
-    body = request.form["message"]
+    rec = request.form["reciever"]
+    recipients = list(rec.split(","))
+    link = url_for('home')
+    link = urldns + link
+    body = (request.form["message"]+'\n \n' +
+            "Access the self assessment portal {}".format(link))
     subject = request.form["subject"]
     temail = emailtemplate.objects().first()
 
@@ -669,14 +698,14 @@ def sendmail():
     msg = Message(subject=subject, body=body,
                   sender=sender, recipients=recipients)
     mail.send(msg)
-    print("Mail has been sent  ")
+    
     ''' 
     #adding attachment
     with app.open_resource("image.png") as fp:
         msg.attach("image.png", "image/png", fp.read())
     '''
     
-    flash(f"Mail has been Sent to {recipients}", "success")
+    flash(f"Mail has been Sent to {rec}", "success")
     return redirect(url_for('admindash'))
 
 
@@ -731,42 +760,6 @@ def emailself():
 
 ########### eval 
 
-@app.route('/eval',methods=['GET','POST'])
-def eval():
-    # doing the export the result first 
-    
-    pro = projects.objects.all() # reading all the projects 
-    ru = rubics.objects.all()
-
-    result = []
-    for p in pro:
-        rin = dict([('userId', p.userId),('firstName',p.firstName),('lastName',p.lastName)])
-        
-        for r in ru: 
-            res = samatrix.objects(fsid=1, Indicator=r.Indicator)
-            res = res.to_json()
-            res = json.loads(res)
-            df = pd.DataFrame(res)
-            
-            vavg = df[['value']].mean()
-            vavg = int(vavg)
-
-            rinl = dict([(r.Indicator, int(vavg))])
-            
-            rin.update(rinl)
-     
-        result.append(rin)
-    
-    dfres = pd.DataFrame(result)
-    filename = 'assessmentresult.xlsx'
-    dfres.to_excel(filename)
-    print(" save the xls file")
-
-    return redirect(url_for('download'))
-    #fname = "assessmentresult.xlsx"
-
-    #send_from_directory(app.config['UPLOAD_FOLDER'],filename=fname,as_attachment=True)
-    #send_file(fname,as_attachment=True)
     
 
 
@@ -780,3 +773,8 @@ def download():
     except:
         flash("can't downlaod the file please contact the developer","danger")
         return redirect(url_for('admindash'))
+
+
+
+
+    

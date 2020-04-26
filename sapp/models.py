@@ -4,7 +4,7 @@ from sapp import db
 from sapp import admin
 import pandas as pd
 import os
-from flask import flash
+from flask import flash,json
 
 # database  schema  are described here
 class User(db.Document):
@@ -158,6 +158,70 @@ class samatrix(db.Document):
     fsname = db.StringField()
     Indicator = db.StringField()
     value = db.IntField()
+
+    #### defining a fuction eval
+
+
+    def eval():
+        # doing the export the result first
+
+        pro = projects.objects(assessmentStatus=1)
+
+        # reading all the projects who have filled the assessment
+        ru = rubics.objects.all()
+
+        result = []
+        for p in pro:
+            rin = dict([('userId', p.userId), ('firstName',
+                                            p.firstName), ('lastName', p.lastName)])
+
+            for r in ru:
+                res = samatrix.objects(fsid=p.userId, Indicator=r.Indicator)
+                res = res.to_json()
+                res = json.loads(res)
+                df = pd.DataFrame(res)
+
+                vavg = df[['value']].mean()
+                vavg = int(vavg)
+                #print(vavg)
+                rinl = dict([(r.Indicator, vavg)])
+
+                rin.update(rinl)
+
+            result.append(rin)
+
+        # adding the projects where students havent given assessment
+
+        pro = projects.objects(assessmentStatus=0)
+
+        # reading all the projects who have filled the assessment
+        ru = rubics.objects.all()
+
+        eresult = []
+        for p in pro:
+            rin = dict([('userId', p.userId), ('firstName',
+                                            p.firstName), ('lastName', p.lastName)])
+
+            for r in ru:
+                vavg = 'NA'
+                #print(vavg)
+                rinl = dict([(r.Indicator, vavg)])
+
+                rin.update(rinl)
+
+            eresult.append(rin)
+
+        cresult = result + eresult
+
+        #print(cresult)
+
+        dfres = pd.DataFrame(cresult)
+        dfres = dfres.sort_values(by=['userId'])
+        #print(dfres)
+        filename = 'assessmentresult.xlsx'
+        dfres.to_excel(filename, index=False)
+
+        #print(" save the xls file")
 
 
 

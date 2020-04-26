@@ -30,7 +30,7 @@ s = URLSafeTimedSerializer('SECRET_KEY')
 # initializing the mail services 
 mail = Mail(app)
 
-
+urldns = "http://saportal.sce.carleton.ca"
 # adding the API for the application
 #api=Api()
 #api.init_app(app)

@@ -19,7 +19,7 @@
     <p><b>Project Title:</b> {{sdata.title}}</p>
     <p><b>Group Number:</b> {{sdata.groupNo}}</p>
     <p><b>Supervisor:</b> {{sdata["supervisor"]}}</p>
-    {% if (sdata.coSupervisor!='NA') %}
+    {% if (sdata.coSupervisor!='nan') %}
     <p> <b>co-supervisor:</b> {{sdata.coSupervisor}}</p>
     {% endif %}
       </div>
