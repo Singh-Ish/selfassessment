@@ -87,7 +87,7 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         
-        if not User.objects(email=email):
+        if not User.objects(email=email).first():
             flash(f"You have don't have access to the portal. Kindly contact the admin staff","danger")
             return redirect(url_for('home'))
 
@@ -101,10 +101,11 @@ def login():
         #print(link)
         externallink = (urldns + link)
         print(externallink)
-        u = User.objects(email=email)
+
+        u = User.objects(email=email).first()
 
         msg = Message(sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
-        msg.body = " Hi {}".format(u.firstName) + '\n' + "Welcome to the self assessment portal for Department of System and Computer Engineering" + "\n" + "your login link is \n \n {}".format(externallink) + " \n Thanks and Regards \n Department of System and Computer Engineering \n Admin Staff"
+        msg.body = " Hi {}".format(u.firstName) + '\n \n ' + "Welcome to the self assessment portal for Department of System and Computer Engineering" + "\n \n " + "your login link is as below \n \n  {}".format(externallink) + "  \n \n Thanks and Regards"+ "\n \n "+" Department of System and Computer Engineering"+ "\n"+ "Admin Staff"
         mail.send(msg)
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
