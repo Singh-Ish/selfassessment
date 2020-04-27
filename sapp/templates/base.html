@@ -11,7 +11,7 @@
 
 <!-- custom css -->
   <!--  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css')}}"> <!-- issue somethimes doesn't work -->
-
+    <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
     <style >
 
     .logo{
@@ -97,6 +97,12 @@
       
       }
 
+      .landing-page{
+        font-family: 'Muli', sans-serif;
+        word-spacing: 5px;
+        line-height: 180%;
+      }
+
       
 
     </style>
@@ -125,7 +131,8 @@
 
   {% endblock %}
 </div>
-
+<br>
+<br>
 
 
 {% include 'includes/footer.html' %}
