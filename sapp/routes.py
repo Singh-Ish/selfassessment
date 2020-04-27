@@ -97,7 +97,7 @@ def login():
         msg = Message('confirm Email token login',sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
 
         # link to the token 
-        link = url_for('confirm_mail', token=token, _external=True)
+        link = url_for('confirm_mail', token=token)
         #print(link)
         externallink = (urldns + link)
         #print(externallink)
