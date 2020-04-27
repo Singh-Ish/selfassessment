@@ -80,8 +80,9 @@
     {% if session['role']=='student' %}
     <a class="p-2 text-dark" href="{{ url_for('sdash') }}">Student Dashboard</a>
     {% else %}
-    
+    <!--
     <a class="p-2 text-dark" href="{{ url_for('fdash') }}">Faculty Dashboard</a>
+    -->
     <a class="p-2 text-dark" href="{{ url_for('admindash') }}">Admin</a>
     
     {% endif %}
