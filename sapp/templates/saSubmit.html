@@ -2,16 +2,16 @@
 
 {% block content %}
   <div class="jumbotron">
-    <p> Hi  <b> {{ name }} </b> please submit your Assessment for your group members in the table below</p>
+    <p> <h4> Hi  <b> {{ name }} </b> please submit your Assessment for your group members in the table below </h4></p>
 
   </div>
 
-  <p class="note"> <b>Note</b> Please find the details about the rubix below </p>
+  
   <div class="satab">
     <p>{% include 'other/samatrix.html' %}</p>
     <!-- <button type="button" onclick="location.href='{{ url_for('fsa') }}'" name="button">Next</button>  -->
   </div>
-  <div class="sarules">
+  <div class="sarules" id="rubics">
     <h2>Category Rubics</h2>
     <p>{% include 'other/rubics.html' %}</p>
   </div>

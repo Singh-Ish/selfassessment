@@ -2,19 +2,22 @@
 
 {% block content %}
     <div class="jumbotron">
-      <p>Hi <b> {{ sdata.firstName }} {{ sdata.lastName }} </b>, welcome to the self assessment Portal</p>
+      <p> <h4> Hi <b> {{ sdata.firstName }} {{ sdata.lastName }} </b>, welcome to the self assessment Portal </h4></p>
 
     </div>
 
     <div class="container message">
       {% if (sdata.assessmentStatus == 0 ) %}
-      <p class="n-stu-msg">Kindly submit the self assessment</p>
+      <p class="n-stu-msg">  Kindly submit the self assessment </p>
       {% else %}
       <p class="s-stu-msg">Thank you for already submitting the assessment. For any concerns reach out to your professor</p>
       {% endif %}
     </div>
 
-    <p>Please confirm your project details:</p>
+    <hr class="featurette-divider">
+
+    <p><h6> Please confirm your project details: </h6></p>
+    <br>
     <div class="student-details" >
     <p><b>Project Title:</b> {{sdata.title}}</p>
     <p><b>Group Number:</b> {{sdata.groupNo}}</p>
@@ -26,15 +29,17 @@
       <br>
     <p class="note">
     <small>  <i><strong> Note</strong> For any changes to the details kindly contact your supervisor or admin staff </i> </small></p>
-
-
-   
+      <br>
+    <hr class="featurette-divider">
 
     <!-- the status of the other grou members who have submited the assessment  -->
-    <p>Kindly check the group members of your group  </p>
+    <p> <h6> Kindly check the group members of your group </h6> </p>
+    <br>
     {% include 'status/sstatus.html' %}
     
-    <p class="note"> <small> <i><strong> Note</strong> If there are any changes kindly contact your administrator </p>
+    <p class="note">
+      <small> <i><strong> Note</strong> For any changes to the details kindly contact your supervisor or admin staff </i>
+      </small></p>
     <br>
     <!--
     <button class="btn btn-primary" type="button" onclick="location.href='{{ url_for('saSubmit') }}'" name="button"> Continue </button>

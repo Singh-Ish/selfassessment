@@ -74,7 +74,7 @@ def login():
 
 
     if session.get('username'):
-        flash("you are already logged in ", "success")
+        flash("You are already logged in ", "success")
         return redirect(url_for('home'))
 
     '''
@@ -88,10 +88,10 @@ def login():
         email = request.form['email']
         
         if not User.objects(email=email):
-            flash(f"you have don't have access to the portal. Kindly contact the admin staff","danger")
+            flash(f"You have don't have access to the portal. Kindly contact the admin staff","danger")
             return redirect(url_for('home'))
 
-        print(email)
+        #print(email)
         token = s.dumps(email, salt='emailsession')
 
         msg = Message('confirm Email token login',sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
@@ -100,7 +100,7 @@ def login():
         link = url_for('confirm_mail', token=token)
         #print(link)
         externallink = (urldns + link)
-        #print(externallink)
+        print(externallink)
         
         msg.body = ' \n Hi your login link is \n \n {}'.format(externallink)
         mail.send(msg)
@@ -132,18 +132,18 @@ def confirm_mail(token):
             session['role'] = r.rname
             if(r.rname == 'admin'):
                 flash(
-                    f"{user.firstName}, you are successfully logged in and have admin priveledges!", "success")
+                    f"{user.firstName}, You are successfully logged in and have admin priveledges!", "success")
                 return redirect(url_for("admindash"))
 
-            flash(f"{user.firstName}, you are successfully logged in!", "success")
+            flash(f"{user.firstName}, You are successfully logged in!", "success")
             return redirect(url_for("sdash"))
         else:
-            flash("you are Not a valid user. please contact the faculty or department Admin","danger")
+            flash("You are Not a valid user. please contact the faculty or department Admin","danger")
             return redirect(url_for("home"))
         
 
     except SignatureExpired:
-        flash("the token has expired. Please try to login again","danger")
+        flash("The token has expired. Please try to login again","danger")
         return redirect(url_for("login"))
 
 '''
@@ -222,12 +222,12 @@ def logout():
 @app.route("/sdash/")
 def sdash():
     if not session.get('username'):
-        flash(f"you are not currently logged in. Kindly login to proceed","danger")
+        flash(f"You are not currently logged in. Kindly login to proceed","danger")
         return redirect(url_for('login'))
     userId= session.get('userId')
     # if no group number just move to home 
     if not projects.objects(userId=userId).first():
-        flash("you are successfully logged in! but you don't belong to any group", "danger")
+        flash("You are successfully logged in! but you don't belong to any group", "danger")
         return redirect(url_for('home'))
     su = projects.objects(userId=userId).first()
     mgroup = projects.objects(groupNo=su.groupNo)
@@ -238,10 +238,19 @@ def sdash():
 def admindash():
     userId = session.get('userId')
     if not userId: 
-        flash("kindly login to proceed","danger")
+        flash("Kindly login to proceed","danger")
         return redirect(url_for('login'))
 
     r = role.objects(userId=userId).first()
+
+    if not emailtemplate.objects().first():
+        sender= 'Ishdeepsingh@sce.carleton.ca'
+        subject= 'Reminder to Submit your self assessment '
+        body=  'Please submit your self assessment for your project' + '\n' + 'To login use {} '.format(urldns)
+
+        t = emailtemplate(sender=sender,subject=subject,message=body)
+        t.save()
+
 
     user = User.objects(userId=userId).first() # checking if used has admin rights or not 
     if(r.rname == 'admin'):
@@ -249,14 +258,14 @@ def admindash():
         proj = projects.objects.all()
         etemp = emailtemplate.objects().first()
         return render_template("dash/admindash.html",user=user,etemp=etemp,ru =ru, proj=proj, adminDash=True)
-    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
 
 @app.route("/fdash")
 def fdash():
     userId = session.get('userId')
     if not userId:
-        flash("kindly login to proceed", "danger")
+        flash("Kindly login to proceed", "danger")
         return redirect(url_for('login'))
 
     r = role.objects(userId=userId).first()
@@ -267,7 +276,7 @@ def fdash():
         ru=rubics.objects()
         proj = projects.objects.all()
         return render_template("dash/fdash.html", user=user, proj=proj, ru=ru,fdash=True)
-    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
 
 # submitting the student response matrix
@@ -366,7 +375,7 @@ def fsa():
             f.save()
             print("comment has been saved to the database")
         
-        flash("response have been saved!", "success")
+        flash("Response have been saved!", "success")
         
         try:
             samatrix.eval()
@@ -397,18 +406,18 @@ def uploader():
                 return redirect(url_for('admindash'))
 
             if f.filename != 'rubicsMetrix.xlsx':
-                flash('please upload the correct rubix file',"danger")
+                flash('Please upload the correct rubix file',"danger")
                 return redirect(url_for('admindash'))
 
             sf = secure_filename(f.filename)
             #print(os.path.join(app.config['UPLOAD_FOLDER'], sf))
             f.save(os.path.join(app.config['UPLOAD_FOLDER'],sf))
-            flash("uploaded file successfully","success")
+            flash("Uploaded file successfully","success")
             try:
                 rubics.uploadnew()        # update the rubics data in the database
-                flash("successfully saved the rubics cube details to the database", "success")
+                flash("Successfully saved the rubics cube details to the database", "success")
             except:
-                flash("can't update save the rubics cube details to the database","danger")
+                flash("Can't update save the rubics cube details to the database","danger")
 
             return redirect(url_for('admindash'))
         else:
@@ -432,7 +441,7 @@ def pupload():
             return redirect(url_for('admindash'))
 
         if f.filename != 'projectDetails.xlsx':
-            flash('please upload the correct project details file with the same name and format', "danger")
+            flash('Please upload the correct project details file with the same name and format', "danger")
             return redirect(url_for('admindash'))
 
         sf = secure_filename(f.filename)
@@ -442,9 +451,9 @@ def pupload():
         
         try:
             projects.pupload()       # update the project data in the database fucntion in models
-            flash("successfully saved the Project details to the database", "success")
+            flash("Successfully saved the Project details to the database", "success")
         except:
-            flash("can't update save the Project details to the database","danger")
+            flash("Can't update save the Project details to the database","danger")
         
         return redirect(url_for('admindash'))
 
@@ -466,7 +475,7 @@ def uupload():
             return redirect(url_for('admindash'))
 
         if f.filename != 'userDetails.xlsx':
-            flash('please upload the correct user details file with the same name and format', "danger")
+            flash('Please upload the correct user details file with the same name and format', "danger")
             return redirect(url_for('admindash'))
         print(f.filename)
         sf = secure_filename(f.filename)
@@ -477,9 +486,9 @@ def uupload():
         
         try:
             User.userUpload()      # update the User data in the database fucntion in models
-            flash("successfully saved the User details to the database", "success")
+            flash("Successfully saved the User details to the database", "success")
         except:
-            flash("can't update  the User details to the database", "danger")
+            flash("Can't update  the User details to the database", "danger")
         
         return redirect(url_for('admindash'))
 
@@ -502,7 +511,7 @@ def fdupload():
 
         if f.filename != 'facultyDetails.xlsx':
             flash(
-                'please upload the correct faculty details file with the same name and format', "danger")
+                'Please upload the correct faculty details file with the same name and format', "danger")
             return redirect(url_for('admindash'))
         print(f.filename)
         sf = secure_filename(f.filename)
@@ -512,9 +521,9 @@ def fdupload():
         #faculty.newf()
         try:
             faculty.newf()      # update the User data in the database fucntion in models
-            flash("successfully saved the User details to the database", "success")
+            flash("Successfully saved the User details to the database", "success")
         except:
-            flash("can't update  the faculty details to the database", "danger")
+            flash("Can't update  the faculty details to the database", "danger")
         
         
 
@@ -530,7 +539,7 @@ def user():
     #User(userId=222,firstName="Mary",lastName="jane",email="mary.jane@uta.com", password="password123").save()
     userId = session.get('userId')
     if not userId:
-        flash("kindly login to proceed", "danger")
+        flash("Kindly login to proceed", "danger")
         return redirect(url_for('login'))
 
     r = role.objects(userId=userId).first()
@@ -538,7 +547,7 @@ def user():
     if(r.rname == 'admin'):
         users = User.objects.all()
         return render_template("dbview/user.html", users=users)
-    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
 
 
@@ -555,7 +564,7 @@ def project():
         proj = projects.objects.all()
         return render_template("dbview/project.html", proj=proj)
 
-    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
     
 
@@ -563,7 +572,7 @@ def project():
 def scomment():
     userId = session.get('userId')
     if not userId:
-        flash("kindly login to proceed", "danger")
+        flash("Kindly login to proceed", "danger")
         return redirect(url_for('login'))
 
     r = role.objects(userId=userId).first()
@@ -572,7 +581,7 @@ def scomment():
         com = feedback.objects.all()
         return render_template("dbview/scomment.html", comm=com)
 
-    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
     
     
@@ -583,7 +592,7 @@ def facultymembers():
     #flash("added new faculty list to database","success")
     userId = session.get('userId')
     if not userId:
-        flash("kindly login to proceed", "danger")
+        flash("Kindly login to proceed", "danger")
         return redirect(url_for('login'))
 
     r = role.objects(userId=userId).first()
@@ -592,7 +601,7 @@ def facultymembers():
         fac = faculty.objects.all()
         return render_template("dbview/facultyview.html", fac=fac)
 
-    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
 
     
@@ -625,7 +634,7 @@ def arole():
 
         return render_template("dbview/arole.html", urole=userrole)
 
-    flash("you don't have permission to access this page kingly contact your administrtor", "danger")
+    flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
 
     
@@ -686,15 +695,13 @@ def emailall():
 def sendmail():  
     rec = request.form["reciever"]
     recipients = list(rec.split(","))
+    sender = request.form['sender']
     link = url_for('home')
     link = urldns + link
     body = (request.form["message"]+'\n \n' +
-            "Access the self assessment portal {}".format(link))
+            "Access link to the self assessment portal {}".format(link))
     subject = request.form["subject"]
-    temail = emailtemplate.objects().first()
-
     
-    sender = temail.sender
     msg = Message(subject=subject, body=body,
                   sender=sender, recipients=recipients)
     mail.send(msg)
@@ -758,7 +765,7 @@ def emailself():
     return redirect(url_for('admindash'))
 
 
-########### eval 
+########### download excel  
 
     
 

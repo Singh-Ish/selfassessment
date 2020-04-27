@@ -227,9 +227,9 @@ class samatrix(db.Document):
 
 class emailtemplate(db.Document):
     #userId = db.IntField(unique=True, required=True) in future there will be multiple admins so multiple templates
-    sender = db.StringField()
-    subject = db.StringField()
-    message = db.StringField()
+    sender = db.StringField(default='ishdeepsingh@sce.carleton.ca')
+    subject = db.StringField(default='self assessment portal')
+    message = db.StringField(default='please submit your assessment ')
 
 ########## students comments and feedback 
 class feedback(db.Document):

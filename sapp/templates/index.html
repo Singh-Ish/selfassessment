@@ -10,17 +10,27 @@
       <h2>Welcome to "System and Computer Engineering Department" <br> <br><b> Self Assessment Portal </b></h2>
     
       <hr class="my-4">
-      <p>Introduction about the portal </p>
+      <p>
+      
+        The Canadian Engineering Accreditation Board requires graduates 
+        of engineering programs to possess 12 attributes at the time of 
+        graduation. <b> You have been asked to complete a self –assessment 
+        of yourself and your group for Graduate Attribute 6: Individual and 
+        team work related to your 4th Year Capstone Project </b>. Graduate Attribute 6 represents a student’s
+        ability to work effectively as a member and leader in teams, preferably in a multi-disciplinary setting. Graduate
+        attribute measurements will not be taken into consideration in determining a student’s grade in the course.
+      
+      </p>
       
       <p class="lead">
 
         <div>
         {% if home %}
-        <h5>You are already Logged In </h5>
+        <h5 class="plogin">You are already Logged In </h5>
         
         {% else %}
         <h5>Lets get started</h5>
-        <p>Please Login to access the Portal</p>
+        <p class="rlogin">Please Login to access the Portal</p>
         <a class="btn btn-primary btn-lg" href="{{ url_for('login') }}" role="button">Login</a>
         {% endif %}
         
