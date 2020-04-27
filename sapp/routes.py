@@ -94,15 +94,17 @@ def login():
         #print(email)
         token = s.dumps(email, salt='emailsession')
 
-        msg = Message('confirm Email token login',sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
+        
 
         # link to the token 
         link = url_for('confirm_mail', token=token)
         #print(link)
         externallink = (urldns + link)
         print(externallink)
-        
-        msg.body = ' \n Hi your login link is \n \n {}'.format(externallink)
+        u = User.objects(email=email)
+
+        msg = Message(sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
+        msg.body = " Hi {}".format(u.firstName) + '\n' + "Welcome to the self assessment portal for Department of System and Computer Engineering" + "\n" + "your login link is \n \n {}".format(externallink) + " \n Thanks and Regards \n Department of System and Computer Engineering \n Admin Staff"
         mail.send(msg)
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
