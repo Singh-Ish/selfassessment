@@ -98,12 +98,12 @@ def login():
 
         # link to the token 
         link = url_for('confirm_mail', token=token, _external=True)
-        print(link)
+        #print(link)
         externallink = (urldns + link)
         #print(externallink)
         
         msg.body = ' \n Hi your login link is \n \n {}'.format(externallink)
-        #mail.send(msg)
+        mail.send(msg)
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
     
