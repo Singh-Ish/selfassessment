@@ -37,7 +37,7 @@ urldns = "http://saportal.sce.carleton.ca"
 
 
 
-app.run()
+
 
 # database settings
 try :

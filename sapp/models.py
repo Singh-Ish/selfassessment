@@ -215,11 +215,26 @@ class samatrix(db.Document):
 
         #print(cresult)
 
+        dru = pd.read_excel('sapp/static/docs/rubicsMetrix.xlsx')
+        dru = dru.set_index('Indicator')
+        dru.to_excel("result.xlsx")
+
+
         dfres = pd.DataFrame(cresult)
         dfres = dfres.sort_values(by=['userId'])
-        #print(dfres)
+        
+        dfres['name'] = dfres['firstName'].astype(str) + " " + dfres['lastName'].astype(str) 
+        dfres = dfres.drop(columns=['firstName','lastName','userId'])
+    
+        dfres = dfres[["name", "6.1 Personal and group time management",
+                       "6.2 Group culture, group dynamics", "6.3 Leadership: initiative and mentoring, areas of expertise, and interdisciplinary teams"]]
+        dfres_t = dfres.set_index('name').transpose()
+        
+        dfres_t.to_excel("tresult.xlsx")
+        res = pd.concat([dru,dfres_t],axis=1,sort=False)
+        #print(res)
         filename = 'assessmentresult.xlsx'
-        dfres.to_excel(filename, index=False)
+        res.to_excel(filename)
 
         #print(" save the xls file")
 

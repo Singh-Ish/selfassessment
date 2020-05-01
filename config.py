@@ -27,4 +27,5 @@ class Config(object):
     MAIL_ASCII_ATTACHMENTS = False
     MAIL_USERNAME = 'ishdeepsingh@sce.carleton.ca'
     MAIL_PASSWORD = 'Change.711'
-    MAIL_DEFAULT_SENDER = 'ishdeepsingh@sce.carleton.ca'
+    MAIL_DEFAULT_SENDER = ('Self-Assessment Portal',
+                           'saportal@sce.carleton.ca')
