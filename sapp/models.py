@@ -45,6 +45,7 @@ class User(db.Document):
             firstName = u['firstName']
             lastName = u['lastName']
             email = u['email']
+            email = email.lower()
             
                 
             s = User(userId=userId,firstName=firstName,lastName=lastName,email=email)
@@ -172,8 +173,8 @@ class samatrix(db.Document):
 
         result = []
         for p in pro:
-            rin = dict([('userId', p.userId), ('firstName',
-                                            p.firstName), ('lastName', p.lastName)])
+            rin = dict([('StudentId/GA', p.userId), ('LastName', p.lastName),('FirstName',
+                                            p.firstName)])
 
             for r in ru:
                 res = samatrix.objects(fsid=p.userId, Indicator=r.Indicator)
@@ -199,9 +200,8 @@ class samatrix(db.Document):
 
         eresult = []
         for p in pro:
-            rin = dict([('userId', p.userId), ('firstName',
-                                            p.firstName), ('lastName', p.lastName)])
-
+            rin = dict([('StudentId/GA', p.userId), ('LastName', p.lastName), ('FirstName',
+                                                                            p.firstName)])
             for r in ru:
                 vavg = 'NA'
                 #print(vavg)
@@ -211,10 +211,19 @@ class samatrix(db.Document):
 
             eresult.append(rin)
 
+        
         cresult = result + eresult
 
         #print(cresult)
+        
+        df = pd.DataFrame(cresult)
 
+        try:
+            df = df.rename(columns={'6.1 Personal and group time management': 'GA 6.1', '6.2 Group culture, group dynamics': 'GA 6.2', '6.3 Leadership: initiative and mentoring, areas of expertise, and interdisciplinary teams':'GA 6.3'})
+            print(df)
+        except:
+            print("can't change the coloums")
+        '''
         dru = pd.read_excel('sapp/static/docs/rubicsMetrix.xlsx')
         dru = dru.set_index('Indicator')
         dru.to_excel("result.xlsx")
@@ -233,10 +242,10 @@ class samatrix(db.Document):
         dfres_t.to_excel("tresult.xlsx")
         res = pd.concat([dru,dfres_t],axis=1,sort=False)
         #print(res)
+        '''
         filename = 'assessmentresult.xlsx'
-        res.to_excel(filename)
-
-        #print(" save the xls file")
+        df.to_excel(filename,index=False)
+        print(" save the xls file")
 
 
 

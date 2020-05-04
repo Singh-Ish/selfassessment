@@ -86,6 +86,9 @@ def login():
 
     if request.method == 'POST':
         email = request.form['email']
+        email = email.lower()
+
+        print(email)
         
         if not User.objects(email=email).first():
             flash(f"You have don't have access to the portal. Kindly contact the admin staff","danger")
@@ -112,7 +115,7 @@ def login():
         return redirect(url_for("login"))
     
     if not role.objects(rname="admin").first():
-        u = User(userId=1,firstName="Ish",lastName="singh",email="ishdeepsingh@sce.carleton.ca")
+        u = User(userId=1,firstName="Ish",lastName="singh",email="Ishdeepsingh@sce.carleton.ca")
         u.save() 
         ro = role(userId=1,rname="admin")
         ro.save()
@@ -124,7 +127,6 @@ def login():
 def confirm_mail(token):
     try:
         email = s.loads(token, salt='emailsession', max_age=600) # token will be valid for 10 minutes 
-
         user = User.objects(email=email).first()
         
         if user:
@@ -776,20 +778,20 @@ def emailself():
 
 @app.route('/download', methods=['GET', 'POST'])
 def download():
-    print(" hello from download ")
+    
     filename = "assessmentresult.xlsx"
 
-    #samatrix.eval()
-
-    #return redirect(url_for('admindash'))
+    samatrix.eval()
+    return redirect(url_for('admindash'))
     
+    '''
     try: 
         return send_file(os.path.join(os.getcwd(), filename), as_attachment=True)
 
     except:
         flash("can't downlaod the file please contact the developer","danger")
         return redirect(url_for('admindash'))
-    
+    '''
 
 
 
