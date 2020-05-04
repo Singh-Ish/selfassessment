@@ -781,17 +781,17 @@ def download():
     
     filename = "assessmentresult.xlsx"
 
-    samatrix.eval()
-    return redirect(url_for('admindash'))
+    #samatrix.eval()
+    #return redirect(url_for('admindash'))
     
-    '''
+    
     try: 
         return send_file(os.path.join(os.getcwd(), filename), as_attachment=True)
 
     except:
         flash("can't downlaod the file please contact the developer","danger")
         return redirect(url_for('admindash'))
-    '''
+    
 
 
 
