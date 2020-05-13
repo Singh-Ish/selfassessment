@@ -13,6 +13,10 @@ Things to do
 *Use Docker package management for deployment
 * backup mongodb database with dates
 
+* when busy sending all the email need to show a progress bar on the frontend
+
+* logging every event in flask app
+
 Working on :
 
 done:

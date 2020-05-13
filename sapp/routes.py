@@ -700,7 +700,7 @@ def emailall():
         }
     ]))
 
-    
+    print("hello from email all module" )
 
 
     temail = emailtemplate.objects().first()
@@ -717,6 +717,7 @@ def emailall():
         sender = temail.sender
         msg = Message(sender=sender, subject=subject, body=body, recipients=recipients)
         mail.send(msg)
+        print("sending email to " + str(recipients))
     # write code to check for the assessment for all the user and then send them the mail 
     flash("Mail has been Sent to all the students", "success")
     return redirect(url_for('admindash'))
