@@ -10,6 +10,9 @@ Things to do
 *restful api for admin to make necessary changes
 *table data sorting by clicking on the headers
 
+*Use Docker package management for deployment
+* backup mongodb database with dates
+
 Working on :
 
 done:
