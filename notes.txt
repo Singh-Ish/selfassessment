@@ -1,18 +1,22 @@
-IMportant notes : 
+Important notes :
 
 during login email id is case sensitive 
 
 
-things to do 
-1. automatic email once all the group members fill the form 
- 
-3. fucntionality email to myself almost done : just move the file to the sapp folder 
-4. test bugs and access authorization
+Things to do
 
-6. restful api for admin to make necessary changes
-7. table data sorting by clicking on the headers  
-8. learn how to create sessions an dsave value just for that user
-9. disable faculty dashboard 
+* automatic email once all the group members fill the form to tsend the mail to respective faculty group
+*test bugs and access authorization
+*restful api for admin to make necessary changes
+*table data sorting by clicking on the headers
+
+Working on :
+
+done:
+*learn how to create sessions an dsave value just for that user
+*disable faculty dashboard
+*fucntionality email to myself almost done : just move the file to the sapp folder
+
 
 
 use case : 

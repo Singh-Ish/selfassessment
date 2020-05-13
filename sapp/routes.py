@@ -408,7 +408,7 @@ def fsa():
 
 
 #############################
-# upload the rubics excel file to the database
+# upload the  excel file to the database
 @app.route('/uploader', methods=['GET','POST']) # rubics  Uploader 
 def uploader():
     if request.method =='POST':
@@ -478,7 +478,7 @@ def pupload():
         return redirect(url_for('admindash'))
 
 
-@app.route('/uupload', methods=['GET', 'POST'])  # project uploader
+@app.route('/uupload', methods=['GET', 'POST'])  # user uploader
 def uupload():
     if request.method == 'POST':
 
@@ -503,17 +503,17 @@ def uupload():
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], sf))
 
         #User.userUpload()
-        
+
         try:
             User.userUpload()      # update the User data in the database fucntion in models
             flash("Successfully saved the User details to the database", "success")
         except:
             flash("Can't update  the User details to the database", "danger")
-        
+
         return redirect(url_for('admindash'))
 
 
-@app.route('/fdupload', methods=['GET', 'POST'])  # project uploader
+@app.route('/fdupload', methods=['GET', 'POST'])  # faculty uploader
 def fdupload():
     if request.method == 'POST':
 
@@ -635,6 +635,17 @@ def arole():
 
     r = role.objects(userId=userId).first()
 
+    users = role.objects.all()
+    adminRole =0
+    studentRole=0
+
+    for ru in users:
+        if (ru.rname=='admin'):
+            adminRole=adminRole+1
+        elif(ru.rname=='student'):
+            studentRole = studentRole+1
+
+
     if(r.rname == 'admin'):
         userrole = list(role.objects.aggregate(*[
             {
@@ -652,7 +663,7 @@ def arole():
             }
         ]))
 
-        return render_template("dbview/arole.html", urole=userrole)
+        return render_template("dbview/arole.html",adminRole=adminRole,studentRole=studentRole, urole=userrole)
 
     flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
@@ -805,8 +816,21 @@ def download():
     except:
         flash("can't downlaod the file please contact the developer","danger")
         return redirect(url_for('admindash'))
-    
 
 
+@app.route('/sdownload',methods=['POST'])
+def sdownload():
+
+    filename = request.form["filename"]
+    print(filename)
+    location = os.path.join(os.getcwd(),"sapp\static\sampleDocs",filename)
+    print(location)
+
+    try:
+        return send_file(location, as_attachment=True)
+
+    except:
+        flash("can't downlaod the file please contact the developer", "danger")
+        return redirect(url_for('admindash'))
 
     

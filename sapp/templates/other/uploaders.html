@@ -1,0 +1,240 @@
+<br><br>
+
+<div id="uploaders">
+<h2>Uploaders </h2>
+<br>
+
+<div class="container">
+
+  <div class="row"> <!-- project and user uploader -->
+  <div class="col-sm-6"> <!-- project Details-->
+    <div class="card">
+      <div class="card-header">
+    <b> Project Details</b>
+      </div>
+      <div class="card-body">
+
+      <p>Upload the latest file containig the project details, student details and their group assignment here </p>
+
+      <br>
+      <form class="fupload" action="/pupload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file"> <br><br>
+        <input type="submit" value=Upload />
+      </form>
+      <br>
+      <p>Click to view the project file or download sample file</p>
+        <div class="row">
+
+          <div class="col-sm-6">
+        <a href="/project" class="btn btn-outline-primary">Preview </a>
+          </div>
+          <div class="col-sm-6">
+      <form action="{{url_for('sdownload')}}" method="POST">
+        <input type="hidden" name="filename" value="projectDetails.xlsx">
+         <button class="btn btn-outline-primary"> Sample file  </button>
+      </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6"> <!-- USer Details -->
+    <div class="card">
+      <div class="card-header">
+    <b> User Details</b>
+      </div>
+      <div class="card-body">
+
+      <p>Upload the latest file containing the User details, who should have access to this portal</p>
+
+      <br>
+      <form class="fupload" action="/uupload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file"> <br><br>
+      <input type="submit" value=Upload />
+    </form>
+      </form>
+      <br>
+      <p>Click to view the user file or download sample file</p>
+        <div class="row">
+
+          <div class="col-sm-6">
+        <a href="/user" class="btn btn-outline-primary">Preview </a>
+          </div>
+          <div class="col-sm-6">
+      <form action="{{url_for('sdownload')}}" method="POST">
+        <input type="hidden" name="filename" value="userDetails.xlsx">
+         <button class="btn btn-outline-primary"> Sample file  </button>
+      </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> <!-- project and user uploader  end -->
+
+<!--
+  <div class="row">
+    <div class="col">
+
+      <p><b>Project Details </b></p>
+      <p>Upload the latest file containig the project details, student details and their group assignment here </p>
+
+      <br>
+      <form class="fupload" action="/pupload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file"> <br><br>
+        <input type="submit" value=Upload />
+      </form>
+      <br>
+      <p>click her <a href="/project">Preview </a> to view the uploaded project details</p>
+
+      <form action="{{url_for('sdownload')}}" method="POST">
+        <input type="hidden" name="filename" value="projectDetails.xlsx">
+       <p>Click her to <button class="btn btn-link"> download </button> the sample file for project details</p>
+      </form>
+
+
+
+    </div>
+    <div class="col">
+
+    <p><b>User Details </b></p>
+    <p>Upload the latest file containing the User details, who should have access to this portal</p>
+    <br>
+    <form class="fupload" action="/uupload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file"> <br><br>
+      <input type="submit" value=Upload />
+    </form>
+    <br>
+    click her <a href="/user">Preview </a> to view the Faculty details
+
+    </div>
+  </div>
+  -->
+  <br><br>
+  <div class="row"><!-- faculty uploader -->
+
+     <div class="col-sm-6">
+    <div class="card">
+      <div class="card-header">
+    <b> Faculty Details</b>
+      </div>
+      <div class="card-body">
+
+      <p>Upload the latest file containig the faculty details, who have projects.</p>
+
+      <br>
+      <form class="fupload" action="/fdupload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file"> <br><br>
+        <input  type="submit" value=Upload />
+      </form>
+      <br>
+      <p>Click to view the Faculty file or download sample file</p>
+        <div class="row">
+
+          <div class="col-sm-6">
+        <a href="/facultymembers" class="btn btn-outline-primary">Preview </a>
+          </div>
+          <div class="col-sm-6">
+      <form action="{{url_for('sdownload')}}" method="POST">
+        <input type="hidden" name="filename" value="facultyDetails.xlsx">
+         <button class="btn btn-outline-primary"> Sample file  </button>
+      </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div> <!-- faculty uploader end  -->
+
+  <!--
+    <div class="col-sm">
+
+      <p><b>Faculty Details </b></p>
+      <p>Upload the latest file containig the faculty details, who should have access to this portal</p>
+      <br>
+      <form class="fupload" action="/fdupload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file"> <br><br>
+        <input  type="submit" value=Upload />
+      </form>
+      <br>
+      click her <a href="/facultymembers">Preview </a> to view the Faculty details
+
+    </div>
+    <div class="col-sm"></div>
+    </div>
+  </div>
+-->
+<br><br>
+</div>
+
+<div class="conatiner"><!-- rubrics uploader -->
+
+    <div class="card">
+      <div class="card-header">
+    <b> Category Rubric Details</b>
+      </div>
+      <div class="card-body">
+
+      <p>Upload the latest rubric file </p>
+      <br>
+      <form class="fupload" action="/uploader" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value=Upload />
+  </form>
+      <br>
+      <p>Click to download  Rubrics sample </p>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="model">
+
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+          Preview
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Latest Rubric Metrics</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                {% include 'other/rubics.html' %}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+              </div>
+            </div>
+          </div>
+</div>
+
+
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+      <form action="{{url_for('sdownload')}}" method="POST">
+        <input type="hidden" name="filename" value="rubicsMetrix.xlsx">
+         <button class="btn btn-outline-primary"> Sample file  </button>
+      </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<br><br>
+
+</div>
+
+
+
+
+
