@@ -2,6 +2,37 @@
 
 {% block content %}
 
+<div class="admindash">
+
+
+<nav id="snav" class="navbar navbar-expand-lg navbar-light  bg-light sticky-top">
+
+
+
+
+  <ul class="nav nav-pills">
+    <li class="nav-item"> <a href="#cstatus" class="nav-link "> Current Status</a>  </li>
+    <li class="nav-item"> <a href="#astatus" class="nav-link "> Assessment Status</a>  </li>
+    <li class="nav-item"> <a href="#rdownload" class="nav-link "> Download Results </a>  </li>
+
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="{{ url_for('user') }}">User</a>
+          <a class="dropdown-item" href="{{ url_for('project') }}"> Project</a>
+          <a  class="dropdown-item" href="{{ url_for('facultymembers') }}"> Faculty Members</a>
+          <a  class="dropdown-item" href="{{ url_for('scomment') }}"> Comments </a>
+         <a class="dropdown-item"  href="{{ url_for('arole') }}"> user access  role  </a>
+
+      </div>
+    </li>
+    <li class="nav-item"> <a href="#uploaders" class="nav-link "> Uploaders </a>  </li>
+  </ul>
+
+</nav>
+
+
+<div class="bd-example" >
 
 <div class="jumbotron">
     <p> <h4> Hey <b> {{user.firstName}} {{user.lastName}}</b>, Welcome to Self Assessment Admin Dashboard </h4><p>
@@ -9,9 +40,63 @@
 
 
 <br><br>
+<div class="container" id="cstatus">
+  <h2>Dashboard : student current status</h2>
+  <br>
+<div class="row">
+
+  <!-- Total Number of students in the system  -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Students</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{tPro}}</div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Students who filled assessment Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Filled Assessments</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{fAss}}</div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
 
 
-  <div class="satab">
+
+  <!-- Pending Requests Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-warning shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Assessments</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{pAss}}</div>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="featurette-divider">
+
+  <div class="satab" id="astatus">
     <h2>Student Assessment Status</h2>
     <br>
     {% include 'other/emailtemp.html'%}
@@ -29,6 +114,7 @@
     <hr class="featurette-divider">
     <br>
     <br>
+    <div id="rdownload">
     <h3>To Download or Export the results</h3>
     <br>
     <div class="container">
@@ -48,7 +134,7 @@
     </div>
     </div>
     </div>
-
+    </div>
   </div>
 
 
@@ -56,7 +142,7 @@
 
   <hr class="featurette-divider">
 
-  <div class="jumbotron">
+  <div class="jumbotron" id="database">
 <h3>Checkout the data in the database </h3>
 <br>
 
@@ -69,6 +155,7 @@
 <!-- project uploader  -->
 <br><br>
 
+<div id="uploaders">
 <h2>Uploaders </h2>
 <br>
 
@@ -151,8 +238,12 @@
   </div>
 
   </div>
+  </div>
 
   <br><br>
-  
+  </div>
+</div>
+
+
 
 {% endblock %}

@@ -101,16 +101,16 @@ def login():
 
         # link to the token 
         link = url_for('confirm_mail', token=token)
-        #print(link)
+        print(link)
         externallink = (urldns + link)
-        print(externallink)
+        #print(externallink)
 
         u = User.objects(email=email).first()
 
         msg = Message(recipients=[email])
         msg.body = " Hi {}".format(u.firstName) + '\n \n ' + "Welcome to the self assessment portal for Department of System and Computer Engineering" + "\n \n " + "your login link is as below \n \n  {}".format(externallink) + "  \n \n Thanks and Regards"+ "\n \n "+" Department of System and Computer Engineering"+ "\n"+ "Admin Staff \n \n"
         msg.subject = "Self Assessment Portal Activation link"
-        mail.send(msg)
+        #mail.send(msg)
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
     
@@ -263,7 +263,21 @@ def admindash():
         ru=rubics.objects()
         proj = projects.objects.all()
         etemp = emailtemplate.objects().first()
-        return render_template("dash/admindash.html",user=user,etemp=etemp,ru =ru, proj=proj, adminDash=True)
+
+        tPro = 0
+        fAss = 0
+        pAss = 0
+
+        for p in proj:
+            tPro = tPro + 1 
+
+            if (p.assessmentStatus == 0):
+                pAss = pAss + 1
+
+            elif (p.assessmentStatus == 1):
+                fAss = fAss +1 
+
+        return render_template("dash/admindash.html",user=user,etemp=etemp,ru =ru, proj=proj, tPro=tPro,fAss=fAss, pAss=pAss, adminDash=True)
     flash("You don't have permission to access this page kingly contact your administrtor", "danger")
     return redirect(url_for('home'))
 
@@ -691,7 +705,7 @@ def emailall():
         body = ("Dear " + s['firstName'] +',' + '\n'+ temail.message +'\n \n' + "Access the self assessment portal {}".format(link))
         sender = temail.sender
         msg = Message(sender=sender, subject=subject, body=body, recipients=recipients)
-        mail.send(msg)
+        #mail.send(msg)
     # write code to check for the assessment for all the user and then send them the mail 
     flash("Mail has been Sent to all the students", "success")
     return redirect(url_for('admindash'))
@@ -710,7 +724,7 @@ def sendmail():
     
     msg = Message(subject=subject, body=body,
                   sender=sender, recipients=recipients)
-    mail.send(msg)
+    #mail.send(msg)
     
     ''' 
     #adding attachment
@@ -762,7 +776,7 @@ def emailself():
     
     
     try:
-        mail.send(msg)
+        #mail.send(msg)
         flash(f"The Email has been sent and the result has been send as an attachement to {cuser.email} ", "success")
     except:
         flash("Can't send mail, contact your administrator ", "danger")

@@ -4,11 +4,18 @@
     <meta charset="utf-8">
     <title>self Assessment Form</title>
 <!--bootstrap cdn  -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 <!-- custom css -->
   <!--  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css')}}"> <!-- issue somethimes doesn't work -->
     <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
@@ -63,21 +70,22 @@
 
     }
 
-   
-    #content-wrap {
-      min-height: 100vh; /* will cover the 100% of viewport */
-      display: block;
-      position: relative;
-      overflow: hidden; 
-      margin-top: 2em;  
+   .border-left-primary {
+    border-left: .25rem solid #4e73df!important;
+    }
+     
+    .border-left-success {
+    border-left: .25rem solid #1cc88a!important;
     }
 
-    .footer{
-      background-color:#f8f9fa;
-      width: 100%;
-      margin-top: 10px;
-      
-      }
+    .border-left-warning {
+    border-left: .25rem solid #f6c23e!important;
+    }
+
+
+    .footer {
+    margin-top:100px;
+    }
 
       .login-form{
         
@@ -111,12 +119,31 @@
         color: red;
       }
 
+      #snav{
+
+      }
+
+      .bd-example {
+    position: relative;
+    padding: 1rem;
+    margin: 1rem -15px 0;
+    border: solid #f7f7f9;
+    border-width: .2rem 0 0;
+
+}
+
+body{
+position:relative;
+overflow: auto;
+margin-top: 2em;
+}
+
     </style>
 
   </head>
 
   <!-- body begins -->
-  <body>
+  <body data-spy="scroll" data-target="#snav" data-offset="50">
 
     <div id="page-container">
 
@@ -132,16 +159,18 @@
           {% endif %}
     {% endwith %}
 
-<div class="container" id="content-wrap">
+<div class="container" >
   {% block content %}
 
   {% endblock %}
-</div>
+
 <br>
 <br>
 
 
 {% include 'includes/footer.html' %}
+</div>
+
 </div>
 
 <script>
