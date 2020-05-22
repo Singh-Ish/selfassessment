@@ -6,7 +6,7 @@ Carleton Univeristy](https://carleton.ca/sce/)
 
 # SA Portal 
 
-Self Assessment portal is to get 
+Self Assessment portal is to get Student's Assessment about themself and other team members based on the defined rubrics metrix. 
 
 
 # Features 
