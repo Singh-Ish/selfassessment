@@ -3,6 +3,10 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from sapp.models import User,samatrix
 
+"""
+creating the wtf forms for registeration or login etc  
+"""
+
 class LoginForm(FlaskForm):
     email   = StringField("Email", validators=[DataRequired(),Email()])
     password = StringField("Password", validators=[DataRequired(),Length(min=5, max=15)])

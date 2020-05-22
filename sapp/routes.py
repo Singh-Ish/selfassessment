@@ -771,6 +771,12 @@ def emailtemp():
 def emailself():
     id = session.get('userId')
 
+    try:
+        samatrix.eval()
+        print("evaluated the assessment and saved in the file ")
+    except:
+        print("can't evaulate the matrix ")
+
     cuser = User.objects(userId=id).first()
     recipients = [cuser.email]
     #recipients = ['ishdeep.711@gmail.com']
@@ -807,6 +813,11 @@ def download():
     
     filename = "assessmentresult.xlsx"
 
+    try:
+        samatrix.eval()
+        print("evaluated the assessment and saved in the file ")
+    except:
+        print("can't evaulate the matrix ")
     #samatrix.eval()
     #return redirect(url_for('admindash'))
     

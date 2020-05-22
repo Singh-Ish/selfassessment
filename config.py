@@ -1,6 +1,19 @@
+# ==== Configuration file ====
+
+
 import os
 
 class Config(object):
+
+    """
+    Config class defines the deafult configuration for the applicaiton 
+    - Database
+    - Flask-Admin
+    - Upload Folder 
+    - Email Configuration  
+
+    """
+
     SECRET_KEY = os.environ.get('SECRET_KEY') or "secret_string"
 
     # changing the server name 
