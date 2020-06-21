@@ -112,6 +112,7 @@ class projects(db.Document):
     lastName = db.StringField( max_length=50)
     firstName = db.StringField( max_length=50)
     assessmentStatus = db.IntField()
+   # course = db.StringField(max_length=500)
 
     def pupload():
         

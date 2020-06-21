@@ -7,37 +7,7 @@
 <div class="container">
 
   <div class="row"> <!-- project and user uploader -->
-  <div class="col-sm-6"> <!-- project Details-->
-    <div class="card">
-      <div class="card-header">
-    <b> Project Details</b>
-      </div>
-      <div class="card-body">
-
-      <p>Upload the latest file containig the project details, student details and their group assignment here </p>
-
-      <br>
-      <form class="fupload" action="/pupload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file"> <br><br>
-        <input type="submit" value=Upload />
-      </form>
-      <br>
-      <p>Click to view the project file or download sample file</p>
-        <div class="row">
-
-          <div class="col-sm-6">
-        <a href="/project" class="btn btn-outline-primary">Preview </a>
-          </div>
-          <div class="col-sm-6">
-      <form action="{{url_for('sdownload')}}" method="POST">
-        <input type="hidden" name="filename" value="projectDetails.xlsx">
-         <button class="btn btn-outline-primary"> Sample file  </button>
-      </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  
   <div class="col-sm-6"> <!-- USer Details -->
     <div class="card">
       <div class="card-header">
@@ -65,6 +35,40 @@
         <input type="hidden" name="filename" value="userDetails.xlsx">
          <button class="btn btn-outline-primary"> Sample file  </button>
       </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6"><!-- faculty uploader -->
+    <div class="card">
+      <div class="card-header">
+        <b> Faculty Details</b>
+      </div>
+      <div class="card-body">
+
+
+  
+        <p>Upload the latest file containig the faculty details, who have projects.</p>
+        <br>
+        <br>
+        <form class="fupload" action="/fdupload" method="POST" enctype="multipart/form-data">
+          <input type="file" name="file"> <br><br>
+          <input type="submit" value=Upload />
+        </form>
+        <br>
+        <p>Click to view the Faculty file or download sample file</p>
+        <div class="row">
+  
+          <div class="col-sm-6">
+            <a href="/facultymembers" class="btn btn-outline-primary">Preview </a>
+          </div>
+          <div class="col-sm-6">
+            <form action="{{url_for('sdownload')}}" method="POST">
+              <input type="hidden" name="filename" value="facultyDetails.xlsx">
+              <button class="btn btn-outline-primary"> Sample file </button>
+            </form>
           </div>
         </div>
       </div>
@@ -111,60 +115,45 @@
   </div>
   -->
   <br><br>
-  <div class="row"><!-- faculty uploader -->
+  <div class="row"> <!-- project Details-->
+  <div class="card">
+    <div class="card-header">
+      <b> Project Details</b>
+    </div>
+    <div class="card-body">
+      
+      {% include 'other/course.html' %}
+      
+      
 
-     <div class="col-sm-6">
-    <div class="card">
-      <div class="card-header">
-    <b> Faculty Details</b>
-      </div>
-      <div class="card-body">
-
-      <p>Upload the latest file containig the faculty details, who have projects.</p>
+      <p>Upload the latest file containig the project details, student details and their group assignment here </p>
 
       <br>
-      <form class="fupload" action="/fdupload" method="POST" enctype="multipart/form-data">
+      <form class="fupload" action="/pupload" method="POST" enctype="multipart/form-data">
         <input type="file" name="file"> <br><br>
-        <input  type="submit" value=Upload />
+        <input type="submit" value=Upload />
       </form>
       <br>
-      <p>Click to view the Faculty file or download sample file</p>
-        <div class="row">
+      <p>Click to view the project file or download sample file</p>
+      <div class="row">
 
-          <div class="col-sm-6">
-        <a href="/facultymembers" class="btn btn-outline-primary">Preview </a>
-          </div>
-          <div class="col-sm-6">
-      <form action="{{url_for('sdownload')}}" method="POST">
-        <input type="hidden" name="filename" value="facultyDetails.xlsx">
-         <button class="btn btn-outline-primary"> Sample file  </button>
-      </form>
-          </div>
+        <div class="col-sm-6">
+          <a href="/project" class="btn btn-outline-primary">Preview </a>
+        </div>
+        <div class="col-sm-6">
+          <form action="{{url_for('sdownload')}}" method="POST">
+            <input type="hidden" name="filename" value="projectDetails.xlsx">
+            <button class="btn btn-outline-primary"> Sample file </button>
+          </form>
         </div>
       </div>
     </div>
   </div>
-  </div> <!-- faculty uploader end  -->
 
-  <!--
-    <div class="col-sm">
+</div> <!-- Project uploader end  -->
 
-      <p><b>Faculty Details </b></p>
-      <p>Upload the latest file containig the faculty details, who should have access to this portal</p>
-      <br>
-      <form class="fupload" action="/fdupload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file"> <br><br>
-        <input  type="submit" value=Upload />
-      </form>
-      <br>
-      click her <a href="/facultymembers">Preview </a> to view the Faculty details
-
-    </div>
-    <div class="col-sm"></div>
-    </div>
-  </div>
--->
 <br><br>
+
 </div>
 
 <div class="conatiner"><!-- rubrics uploader -->
