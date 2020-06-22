@@ -96,14 +96,14 @@ Database Name : assessment
 
 It will have below Collections Database schema Overview 
 
--User : have the details about the user that have access to the portal
--Project : project or course that the students are in group together 
--role : Role of the user weather a is a student or admin ; Access level
--rubics : evaluating matrix 
--samatrix : student response collection
--emailtemplate : default reminder template
--faculty : faculty details 
--feedback : user feedback about the portal or about the course 
+- User : have the details about the user that have access to the portal
+- Project : project or course that the students are in group together 
+- role : Role of the user weather a is a student or admin ; Access level
+- rubics : evaluating matrix 
+- samatrix : student response collection
+- emailtemplate : default reminder template
+- faculty : faculty details 
+- feedback : user feedback about the portal or about the course 
 
 Re-run step 3 
 
@@ -125,7 +125,7 @@ Its an open source projet and for the ease providing the details code descriptio
 
 - Sapp folder contains all the files related code to the development of the applicaiton 
     - Static Folder
-        - Css , external css file for styling the html  
+         - Css , external css file for styling the html  
         - Docs, all the uploaded documents are stored and read from this folder. location can be changed in config 
         - Images, contains the images like the logo etc
         - Sample Docs, Contains a sample document which are allowed to upload on the portal. 
