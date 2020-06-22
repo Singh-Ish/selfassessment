@@ -1,11 +1,14 @@
-<p> Please select the course name </p>
 
-<p>
-<div class="dropdown">
-    <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+
+<p> 
+
+<!--
+    <div class="dropdown">
+
+        <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         Select Course
-    </button>
+        </button>
 
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="#">All</a>
@@ -16,5 +19,30 @@
     </div>
 
 </div>
+-->
+
+<!----->
+<div class="row">
+    
+    <form id="courseSelect">
+    <div class="col-md-8 select-outline ">
+        <label>Please select the course </label>  
+           
+        <select name="course" class=" btn btn-warning mdb-select md-form md-outline colorful-select dropdown-primary">
+            <option value="all"  selected>All</option>
+            <option value="1">Course 1</option>
+            <option value="2">Course 2</option>
+            <option value="3">Course 3</option>
+        </select>
+        
+    </div>
+         
+    </form>
+
+ 
+    
+</div>
 
 </p>
+
+<br>

@@ -21,6 +21,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
     <style >
 
+    
+
+    .md-outline.select-wrapper+label {
+        top: .5em !important;
+        z-index: 2 !important;
+    
+    }
 
     .logo{
       width: 320px;
@@ -186,6 +193,7 @@ position:relative;
 </div>
 
 <script>
+  /*
   (function () {
 
     const idleDurationSecs = 600;    // X number of seconds
@@ -210,6 +218,27 @@ position:relative;
     );
 
   })();
+*/
+  // Material Select Initialization
+    $(document).ready(function () {
+      $('.mdb-select').materialSelect();
+      $('.select-wrapper.md-form.md-outline input.select-dropdown').bind('focus blur', function () {
+        $(this).closest('.select-outline').find('label').toggleClass('active');
+        $(this).closest('.select-outline').find('.caret').toggleClass('active');
+      });
+    });
+
+
+    // Add suggestion based on dropdown selection(s)
+      $('#courseSelect select').on('change', function (event) {
+        var $select = $(event.target),
+          slug = $select.val(),
+          name = $select.find('[value="' + slug + '"]').text();
+
+        $('#selectedcourse').html('<a href="/adminidash/' + slug + '"> <strong>' + name + '</strong> </a>');
+      });
+
+      
 </script>
   </body>
 </html>

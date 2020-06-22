@@ -42,6 +42,9 @@
 <div class="container" id="cstatus">
   <h2>Dashboard : student current status</h2>
   <br>
+  
+  {% include 'other/course.html' %}
+
 <div class="row">
 
   <!-- Total Number of students in the system  -->
@@ -138,12 +141,21 @@
     <br>
 
     {% include 'status/asstatus.html' %}
+
     <hr class="featurette-divider">
     <br>
     <br>
     <div id="rdownload">
     <h3>To Download or Export the results</h3>
     <br>
+        <p>
+        
+          The download option is for <b> <span style="color: #FF0000" id="selectedcourse"> </span> Selected Course </b> . To change the selected course <a
+            href="#courseSelect"> click </a> </p></span>
+
+          
+        </p>
+        <br>
     <div class="container">
     <div class="row">  
       <div clas="col">
