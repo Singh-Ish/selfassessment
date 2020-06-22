@@ -94,14 +94,14 @@ The "Flask run" command will create database collections automatically,
 
 Database Name : assessment
 
-It will have below Collections
+It will have below Collections Database schema Overview 
 
--User : have the details about the user that have access to the portal 
+-User : have the details about the user that have access to the portal
 -Project : project or course that the students are in group together 
--role : Role of the user weather a is a student or admin ; Access level 
+-role : Role of the user weather a is a student or admin ; Access level
 -rubics : evaluating matrix 
--samatrix : student response collection 
--emailtemplate : default reminder template 
+-samatrix : student response collection
+-emailtemplate : default reminder template
 -faculty : faculty details 
 -feedback : user feedback about the portal or about the course 
 
