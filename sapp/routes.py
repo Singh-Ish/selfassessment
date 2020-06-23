@@ -91,10 +91,11 @@ def login():
         msg = Message('confirm Email token login',sender='ishdeepsingh@sce.carleton.ca', recipients=[email])
 
         # link to the token 
-        link = url_for('confirm_mail', token=token, _external=True)
+        #link = url_for('confirm_mail', token=token, _external=True)
+        link = url_for('confirm_mail', token=token)
         print(link)
         msg.body = ' \n Hi your login link is \n \n {}'.format(link)
-        mail.send(msg)
+        #mail.send(msg)
         flash(f"An Email has been sent with authorization token to {email} please verify to login", "success")
         return redirect(url_for("login"))
     
@@ -569,7 +570,7 @@ def sendmail():
     sender = 'ishdeepsingh@sce.carleton.ca'
     msg = Message(subject=subject, body=body,
                   sender=sender, recipients=recipients)
-    mail.send(msg)
+    #mail.send(msg)
     print("Mail has been sent  ")
     ''' adding attachment
     with app.open_resource("image.png") as fp:
@@ -618,7 +619,7 @@ def emailself():
     
     
     try:
-        mail.send(msg)
+        #mail.send(msg)
         flash(f"The Email has been sent and the result has been send as an attachement to {cuser.email} ", "success")
     except:
         flash("Can't send mail, contact your administrator ", "danger")
