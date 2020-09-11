@@ -115,9 +115,14 @@ def login():
         return redirect(url_for("login"))
     
     if not role.objects(rname="admin").first():
-        u = User(userId=1,firstName="Ish",lastName="singh",email="Ishdeepsingh@sce.carleton.ca")
+        u = User(userId=1,firstName="Ish",lastName="singh",email="ishdeepsingh@sce.carleton.ca")
         u.save() 
+        us = User(userId=2, firstName="Tech", lastName="Support",
+                 email="tstaff@sce.carleton.ca")
+        us.save()
         ro = role(userId=1,rname="admin")
+        ro.save()
+        ro= role(userId=2,rname="admin")
         ro.save()
         
     return render_template("auth/login.html", title="Login", login=True )
