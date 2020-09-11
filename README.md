@@ -110,6 +110,24 @@ Re-run step 3
 
 
 
+# running the code in production on red hat server 
+webserver: Nginx 
+python webserver: Supervisor and gunicorn 
+
+## server restart 
+
+check the status 
+'''sh 
+$sudo systemctl status nginix
+< needs to be active > 
+
+$sudo systemctl status supervisord 
+< need to be active > 
+
+'''
+
+
+
 # Code Architecture Design Explanation  
 Its an open source projet and for the ease providing the details code description for better collaboration.
 
