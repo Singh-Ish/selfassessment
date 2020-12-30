@@ -20,7 +20,9 @@ class Config(object):
     #SERVER_NAME = '127:0.0.1:6000'
 
     #database setting
-    MONGODB_SETTINGS= {'db' :'assessment'}
+    MONGODB_SETTINGS= {
+        'host':"mongodb+srv://ishdeepsingh:change.711@cluster0.ulpu6.mongodb.net/test"
+    }
 
     #admin setting
     FLASK_ADMIN_SWATCH = 'cerlean'

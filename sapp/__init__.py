@@ -6,7 +6,7 @@ from flask_admin.contrib.pymongo import ModelView
 from flask_restplus import Api
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
-
+from mongoengine import connect
 
 
 
