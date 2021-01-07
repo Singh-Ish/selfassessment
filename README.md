@@ -44,24 +44,28 @@ $ cd selfassessment
 ```
 #### 2. Installing dependencies and environment, Make sure you have python3, MongoDB Installed on the machine. 
 
-Installing pip and virtual environment 
+- Installing pip and virtual environment 
 ```sh
 $ python3 get-pip.py
 $ pip install virtualenv
 $ virtualenv env  ; Note env is the environment name 
 ```
 
-Activating the virtual Environment
+- Activating the virtual Environment
 
 ```sh
 $ \env\Scripts\activate.bat
 ```
 
-Installing the project dependent packages 
+- Installing the project dependent packages 
 
 ```sh
 $ pip install -r requirement.txt
 ```
+
+- Update the Configuration File with the credentials 
+
+
 ### 3. Running Application  
 we have already configured .flaskenv to run main.py when using "flask run" command.
 
